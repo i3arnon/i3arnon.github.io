@@ -5,7 +5,7 @@ published: true
 tags: [async-await, ValueTask, corefx, channels]
 ---
 
-The [corefxlab](https://github.com/dotnet/corefxlab ".NET Core Lab") repository contains library suggestions for [corefx](https://github.com/dotnet/corefx ".NET Core Libraries") which itself is a repo containing the .NET Core foundational libraries.  One of the gems hidden among these libraries is `ValueTask<T>` that was added by [Stephen Toub](https://github.com/stephentoub "stephentoub") as part of the [System.Threading.Tasks.Channels](https://github.com/dotnet/corefxlab/blob/master/src/System.Threading.Tasks.Channels/README.md) library but may be extremely useful on its own. The full implementation of `ValueTask<T>` can be found [here](https://github.com/dotnet/corefxlab/blob/master/src/System.Threading.Tasks.Channels/src/System/Threading/Tasks/ValueTask.cs), but this is an interesting subset of the API:
+The [corefxlab](https://github.com/dotnet/corefxlab ".NET Core Lab") repository contains library suggestions for [corefx](https://github.com/dotnet/corefx ".NET Core Libraries") which itself is a repo containing the .NET Core foundational libraries.  One of the gems hidden among these libraries is `ValueTask<T>` that was added by [Stephen Toub](https://github.com/stephentoub "stephentoub") as part of the [`System.Threading.Tasks.Channels`](https://github.com/dotnet/corefxlab/blob/master/src/System.Threading.Tasks.Channels/README.md) library but may be extremely useful on its own. The full implementation of `ValueTask<T>` can be found [here](https://github.com/dotnet/corefxlab/blob/master/src/System.Threading.Tasks.Channels/src/System/Threading/Tasks/ValueTask.cs), but this is an interesting subset of the API:
 
 ```csharp
 public struct ValueTask<TResult>
