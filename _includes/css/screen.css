@@ -8,10 +8,11 @@ html, body {
 }
 
 body {
-  font-size: 14px;
-  background-color: white;
-  color: #222222;
-  line-height: 24px;
+  font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  background: #222;
+  color: #ddd;
+  line-height: 1.5;
   margin: 0;
   padding-bottom: 64px;
 }
@@ -21,7 +22,7 @@ body {
 }
 
 h1, h2, h3, h4, h5, h6 {
-  color: #181818;
+  color: #ddd;
   font-family: "open sans", sans-serif;
   font-weight: 600;
 }
@@ -82,18 +83,55 @@ ul {
   list-style: disc;
 }
 
+blockquote {
+    color: #e8e8e8;
+    background-color: #141414;
+    border-left: 2px solid #F47920;
+    padding: 10px;
+    margin-left: 20px;
+}
+
+blockquote>:last-child {
+    margin-bottom: 0;
+}
+
+.social-list {
+    border-radius: 4px;
+    line-height: 2.2;
+    position: relative;
+}
+
+.social-list a svg {
+    transition:transform 0.1s;
+}
+
+.social-list a:hover svg {
+    transform: translateY(-1px) scale(1.1,1.1);
+}
+
+.icon>svg {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+}
+
 a {
-  color: #3333cc;
+  color: #49afef;
   text-decoration: none;
 }
 
 a:hover {
   /*color: {{ site.data.theme.highlight_color }};*/
+  color: #49afef;
   text-decoration: underline;
 }
 
 a:visited {
-  color: #3333cc;
+  color: #1a9aeb;
+}
+
+a.post-link {
+    color: #fff;
 }
 
 table {
@@ -115,14 +153,14 @@ ul.posts {
 
 ul.posts li {
   line-height: 22px;
-  font-size: 14px;
-  margin-bottom: 0px;
+  font-size: 16px;
+  margin-bottom: 15px;
 }
 
 ul.posts span {
   color: #aaa;
   padding-right: 5px;
-  font-size:14px;
+  font-size:16px;
 }
 
 .meta {
@@ -156,7 +194,7 @@ nav h1, nav h2 {
 
 .pagination {
   border: solid #333;
-  background-color: #eef;
+  background-color: #121200;
   border-width: 1px 0;
 }
 
@@ -221,15 +259,15 @@ nav h1, nav h2 {
 }
 
 .content {
-  font: 400 14px/22px "open sans", sans-serif;
-  border-left: 1px solid #DDD;
+  font: 400 16px/22px "open sans", sans-serif;
+  border-left: 1px solid #ddd;
   padding-left: 40px;
   padding-top: 25px;
   min-height: 400px;
 }
 
 .footer {
-  color: #ffffff;
+  color: #222;
   background-color: {{ site.data.theme.highlight_color }};
   height: 32px;
   width: 100%;
@@ -274,11 +312,6 @@ nav h1, nav h2 {
 #stalker i {
   font-size: 28px;
   margin-right: 5px;
-}
-
-#stalker a:hover {
-  text-decoration: none;
-  color: {{ site.data.theme.highlight_color }};
 }
 
 i.fa-hn {

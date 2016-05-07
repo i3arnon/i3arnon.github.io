@@ -3,13 +3,17 @@ url: http://i3arnon.github.io
 description: Acoustic Cheesecake
 email: i3arnon@gmail.com
 
+twitter_account: i3arnon
+github_account:  i3arnon
+stackoverflow_account: 885318
+
 highlighter: rouge
 markdown: kramdown
-excerpt_separator: "\n\n"
+excerpt_separator: <!--more-->
 
 permalink: /:year/:month/:day/:title/
 
-paginate: 10
+paginate: 5
 
 safe: true
 lsi: false

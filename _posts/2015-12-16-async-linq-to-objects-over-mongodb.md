@@ -16,7 +16,7 @@ public interface IAsyncCursor<out TDocument> : IDisposable
     Task<bool> MoveNextAsync(CancellationToken cancellationToken = default(CancellationToken));
 }
 ``` 
- 
+<!--more-->
 To enable asynchronous iteration without [having to implement it yourself](http://stackoverflow.com/a/29683170/885318 "How is an IAsyncCursor used for iteration with the mongodb c# driver?") they added a subset of the LINQ operators, but only those that materialize the query (e.g. `ForEachAsync`,  `ToListAsync`, etc.)
 
 In the latest version of the driver ([v2.1](https://github.com/mongodb/mongo-csharp-driver/releases/tag/v2.1.0)) they added full "LINQ to MongoDB" support (i.e. `IQueryable`) that you can use to create your mongo queries. Just like with LINQ to SQL you can use `Where`, `Select` and so forth to build a complex expression-based query and have it sent to the server only when you start enumerating the `IQueryable`.

@@ -22,7 +22,7 @@ public struct ValueTask<TResult>
     // ...
 }
 ```
-
+<!--more-->
 I first noticed `ValueTask<T>` in the documented API when reviewing the channels PR made to corefxlab. [I suggested adding a short explanation](https://github.com/dotnet/corefxlab/pull/335#issuecomment-149829696) which Stephen quickly provided:
 
 > "`ValueTask<T>` is a discriminated union of a `T` and a `Task<T>`, making it allocation-free for `ReadAsync<T>` to synchronously return a `T` value it has available (in contrast to using `Task.FromResult<T>`, which needs to allocate a `Task<T>` instance). `ValueTask<T>` is awaitable, so most consumption of instances will be indistinguishable from with a `Task<T>`."
