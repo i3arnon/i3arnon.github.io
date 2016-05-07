@@ -15,7 +15,7 @@ An often suggested workaround is to go back to `Task.Factory.StartNew`, which is
 
 The .Net team anticipated this issue and it can be easily solved by using [`TaskExtensions.Unwrap`](https://msdn.microsoft.com/en-us/library/dd780917(v=vs.110).aspx) (which is the accepted answer on [the relevant Stack Overflow question](http://stackoverflow.com/q/26921191/885318) [^1]):
 
-{% highlight C# %}
+```csharp
 Task<Task> task = Task.Factory.StartNew(async () =>
 {
     while (IsEnabled)
@@ -26,7 +26,7 @@ Task<Task> task = Task.Factory.StartNew(async () =>
 }, TaskCreationOptions.LongRunning);
 
 Task actualTask = task.Unwrap();
-{% endhighlight %}
+```
 
 However that hides the actual issue which is:
 
@@ -34,7 +34,7 @@ However that hides the actual issue which is:
 
 The internal implementation [^2] creates a new dedicated thread when you use `TaskCreationOptions.LongRunning`. Here's the code for [`ThreadPoolTaskScheduler.QueueTask`](http://referencesource.microsoft.com/#mscorlib/system/threading/Tasks/ThreadPoolTaskScheduler.cs,55):
 
-{% highlight C# %}
+```csharp
 protected internal override void QueueTask(Task task)
 {
     if ((task.Options & TaskCreationOptions.LongRunning) != 0)
@@ -51,13 +51,13 @@ protected internal override void QueueTask(Task task)
         ThreadPool.UnsafeQueueCustomWorkItem(task, forceToGlobalQueue);
     }
 }
-{% endhighlight %}
+```
 
 But when an async method reaches an await for an uncompleted task the thread it's running on is released. When the task is completed the rest will be scheduled again, this time on a different `ThreadPool` thread. That means that we created a new thread needlessly. This doesn't only waste time for the developer but also hurts performance as creating new threads is costly (otherwise we wouldn't need the `ThreadPool` in the first place).
 
 So, if you ask yourself how to use `Task.Run` with `TaskCreationOptions.LongRunning` when your delegate is asynchronous, save yourself and your application some time and keep using `Task.Run` as it is:
 
-{% highlight C# %}
+```csharp
 Task task = Task.Run(async () =>
 {
     while (IsEnabled)
@@ -66,7 +66,7 @@ Task task = Task.Run(async () =>
         await Task.Delay(TimeSpan.FromSeconds(10));
     }
 });
-{% endhighlight %}
+```
 
 [^1]: Which is the top result when searching for *"Task.Run and LongRunning"*.
 [^2]: Which could possibly change in the future.

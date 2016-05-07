@@ -9,7 +9,7 @@ While profiling our application's performance we stumbled upon a surprising cont
 
 This can be demonstrated by executing the following piece of code:
 
-{% highlight C# %}
+```csharp
 static void Main()
 {
     for (var i = 0; Environment.ProcessorCount > i; i++)
@@ -25,13 +25,13 @@ static void Main()
 
     Console.ReadLine();
 }
-{% endhighlight %}
+```
 
 It starts a thread for each core on the machine that creates timers in a loop (as long as memory allows). If you open Performance Monitor while this runs you would see very high values for the "Contention Rate / sec" performance counter (more than 1000 per second on my 4 core machine).
 
 [Looking at the code](http://referencesource.microsoft.com/#mscorlib/system/threading/timer.cs) you can see that when you create a new `Timer` (or change an existing timer) the internal `Timer.Change` method takes a lock on a singleton instance of `TimerQueue`. Since this is a simple lock (i.e. `Monitor`) on a singleton instance, every `Timer` you create in your entire `AppDomain` is contention waiting to happen:
 
-{% highlight C# %}
+```csharp
 internal bool Change(uint dueTime, uint period)
 {
     bool success;
@@ -64,7 +64,7 @@ internal bool Change(uint dueTime, uint period)
 
     return success;
 }
-{% endhighlight %}
+```
 
 The notes for that [`TimerQueue` class](http://referencesource.microsoft.com/#mscorlib/system/threading/timer.cs,208ff87939c84fe3) show that the fact that timers are created quite often was taken into consideration. Especially in this part:
 
@@ -80,7 +80,7 @@ Now, you might say that you don't really create many of these timers, but a mode
 
 For us the main issue was `CancellationTokenSource`s created with a `TimeSpan` used to timeout our many (&gt;100/s) I/O operations. Since the timeout for these was always the same I made a utility class that uses a single `Timer` and performs an action on all the items (`CancellationTokenSource`s in this case) that their timeout expired:
 
-{% highlight C# %}
+```csharp
 public class CollectiveTimer<T>
 {
     private readonly ConcurrentQueue<QueueItem> _queue;
@@ -118,15 +118,15 @@ public class CollectiveTimer<T>
         }
     }
 }
-{% endhighlight %}
+```
 
 Usage:
 
-{% highlight C# %}
+```csharp
 var collectiveTimer = new CollectiveTimer<CancellationTokenSource>(
     cts => cts.Cancel(), 
     TimeSpan.FromMilliseconds(200),
     cancellationToken);
-{% endhighlight %}
+```
 
 This made our contention completely disappear (at least until the next one)

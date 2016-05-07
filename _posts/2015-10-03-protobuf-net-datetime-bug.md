@@ -13,7 +13,7 @@ While [being very efficient](http://theburningmonk.com/2011/08/performance-test-
 
 `DateTimeKind.Unspecified` values have a behavior that I initially found surprising but later realized is the best possible option. Let's assume you're in Hawaii (because where else would you want to be?) and your time zone is UTC-10:00. If you have a `DateTime` value with `DateTimeKind.Unspecified` and you call `ToLocalTime` the method assumes the value is in UTC and "corrects" it, so 11:00 becomes 01:00. If however you call `ToUniversalTime` on that value the method now assumes it's in local time and "corrects" it so 11:00 becomes 21:00. So the same value is treated as local while adjusting to universal and universal when adjusting to local. Let's see that in code:
 
-{% highlight C# %}
+```csharp
 static void Main()
 {
     var dolly = new Sheep {DateOfBirth = new DateTime(1966, 07, 05, 11, 0, 0, DateTimeKind.Utc)};
@@ -30,7 +30,7 @@ class Sheep
 {
     public DateTime DateOfBirth { get; set; }
 }
-{% endhighlight %}
+```
 
 This can get extremely problematic especially if you, like me, depend upon some library that uses `ToUniversalTime` or `ToLocalTime`. For me that library was the [.Net's MongoDB Driver](https://github.com/mongodb/mongo-csharp-driver) that stores all `DateTime`s in MongoDB in UTC. Using these 2 libraries together is impossible as `DateTime` values would keep changing value infinitely.
 
@@ -38,7 +38,7 @@ This can get extremely problematic especially if you, like me, depend upon some 
 
 But don't fear... I do have a workaround you can use for the meantime. Protobuf-net uses a [`DateTime` value representing the Unix Epoch](https://github.com/mgravell/protobuf-net/blob/15174a09ee3223c8805b3ef81c1288879c746dfa/protobuf-net/BclHelpers.cs#L48) (1970/01/01) to create all the `DateTime`s by adding the relevant delta to the epoch value. Since creating a new `DateTime` from an existing `DateTime` preserves the `DateTimeKind`, replacing the single epoch value with a UTC one will result with all protobuf-net `DateTime` values having `DateTimeKind.UTC`. We can do that by using reflection and replacing the epoch value with a UTC one:
 
-{% highlight C# %}
+```csharp
 typeof (BclHelpers).
     GetField("EpochOrigin", BindingFlags.NonPublic | BindingFlags.Static).
     SetValue(null, new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc));
@@ -48,7 +48,7 @@ Console.WriteLine(dolly.DateOfBirth.ToString("HH:mm:ss K")); // "11:00:00 Z" (Z 
 
 dolly = Serializer.DeepClone(dolly); // Serialize and deserialize using protobuf-net
 Console.WriteLine(dolly.DateOfBirth.ToString("HH:mm:ss K")); // "11:00:00 Z"
-{% endhighlight %}
+```
 
 I admit it's not pretty, but until Marc releases a new version, it's preferable to building your own protobuf-net.
 

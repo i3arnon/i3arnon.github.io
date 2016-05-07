@@ -11,7 +11,7 @@ tags: [async-await, bug]
 
 Here's a simple example using `LogicalFlow`, my simple wrapper over the `LogicalOperationStack`:
 
-{% highlight C# %}
+```csharp
 static void Main()
 {
     OuterOperationAsync().Wait();
@@ -38,11 +38,11 @@ static async Task InnerOperationAsync()
         await Task.Yield();
     }
 }
-{% endhighlight %}
+```
 
 `LogicalFlow`:
 
-{% highlight C# %}
+```csharp
 public static class LogicalFlow
 {
     public static Guid CurrentOperationId
@@ -79,17 +79,17 @@ public static class LogicalFlow
         }
     }
 }
-{% endhighlight %}
+```
 
 And the output is:
 
-{% highlight text %}
+```
 00000000-0000-0000-0000-000000000000
     49985135-1e39-404c-834a-9f12026d9b65
     54674452-e1c5-4b1b-91ed-6bd6ea725b98
     c6ec00fd-bff8-4bde-bf70-e073b6714ae5
 54674452-e1c5-4b1b-91ed-6bd6ea725b98
-{% endhighlight %}
+```
 
 The specific `Guid` values don't really matter. Both the outer lines should show `Guid.Empty` (i.e. `00000000-0000-0000-0000-000000000000`) and the inner lines should show **the same** `Guid` value.
 
@@ -103,24 +103,24 @@ The root cause is that `LogicalOperationStack` is stored in the `CallContext` wh
 
 This can be shown by simply setting **anything** into the `CallContext` before adding to the existing stack. For example if we changed `StartScope` to this:
 
-{% highlight C# %}
+```csharp
 public static IDisposable StartScope()
 {
     CallContext.LogicalSetData("Bar", "Arnon");
     Trace.CorrelationManager.StartLogicalOperation();
     return new Stopper();
 }
-{% endhighlight %}
+```
 
 The output is correct:
 
-{% highlight text %}
+```
 00000000-0000-0000-0000-000000000000
     fdc22318-53ef-4ae5-83ff-6c3e3864e37a
     fdc22318-53ef-4ae5-83ff-6c3e3864e37a
     fdc22318-53ef-4ae5-83ff-6c3e3864e37a
 00000000-0000-0000-0000-000000000000
-{% endhighlight %}
+```
 
 I've contacted the relevant developer at Microsoft and his response was this:
 
@@ -130,7 +130,7 @@ I've contacted the relevant developer at Microsoft and his response was this:
 
 Use an `ImmutableStack` stored in the `CallContext` instead of the `LogicalOperationStack` as it's both thread-safe and immutable so when you call `Pop` you get back a new `ImmutableStack` that you then must set back into the `CallContext`.
 
-{% highlight C# %}
+```csharp
 public static class LogicalFlow
 {
     private static ImmutableStack<Guid> LogicalStack
@@ -165,7 +165,7 @@ public static class LogicalFlow
         LogicalStack = LogicalStack.Pop();
     }
 }
-{% endhighlight %}
+```
 
 Another options is to to store the stack in the new [`System.Threading.AsyncLocal`](https://msdn.microsoft.com/en-us/library/dn906268%28v=vs.110%29.aspx) class added in .Net 4.6 (or [Stephen Cleary](http://www.stephencleary.com)'s [`AsyncLocal`](https://github.com/StephenCleary/AsyncLocal)) instead which should handle that issue correctly.
 
