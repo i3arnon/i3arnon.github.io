@@ -1,2 +1,21 @@
 title: Bar Arnon's Blog
+url: http://i3arnon.github.io
+description: Acoustic Cheesecake
+email: i3arnon@gmail.com
+
+highlighter: rouge
 markdown: kramdown
+excerpt_separator: "\n\n"
+
+permalink: /:year/:month/:day/:title/
+
+paginate: 10
+
+safe: true
+lsi: false
+
+exclude:
+  - CNAME
+  - Gemfile
+  - Gemfile.lock
+  - README.md
