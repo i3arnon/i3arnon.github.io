@@ -121,7 +121,6 @@ a {
 }
 
 a:hover {
-  /*color: {{ site.data.theme.highlight_color }};*/
   color: #49afef;
   text-decoration: underline;
 }
