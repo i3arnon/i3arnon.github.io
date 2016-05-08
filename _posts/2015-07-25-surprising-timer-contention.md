@@ -1,7 +1,6 @@
 ---
 layout: post
 title: Surprising Contention In System.Threading.Timer
-published: true
 tags: [contention, lock, performance, timer]
 ---
 

@@ -1,7 +1,6 @@
 ---
 layout: post
 title: Async LINQ To Objects Over MongoDB
-published: true
 tags: [async-await, mongodb, ReactiveExtensions, InteractiveExtensions, AsyncEnumerable]
 ---
 

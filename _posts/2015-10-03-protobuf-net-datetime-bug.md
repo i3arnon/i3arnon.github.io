@@ -1,7 +1,6 @@
 ---
 layout: post
 title: Protobuf-net Is Broken Around DateTime
-published: true
 tags: [protobuf-net, bug]
 ---
 

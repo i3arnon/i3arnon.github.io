@@ -1,7 +1,6 @@
 ---
 layout: post
 title: LogicalOperationStack Is Broken With async-await
-published: true
 tags: [async-await, bug]
 ---
 
@@ -74,8 +73,7 @@ public static class LogicalFlow
             if (!_isDisposed)
             {
                 StopScope();
-                _isDisposed = true;
-            }
+                            }
         }
     }
 }
@@ -95,7 +93,7 @@ The specific `Guid` values don't really matter. Both the outer lines should show
 
 # Multithreading
 
-You might say that `LogicalOperationStack` is using a `Stack` which is not thread-safe and that's why the output is wrong. But while that's true in general, in this case **there's never more than a single thread accessing the `LogicalOperationStack` at the same time** because every `async` operation is awaited when called and there's no use of combinators such as `Task.WhenAll`.
+You might say that `LogicalOperationStack` is using a `Stack` which is not thread-safe and that's why the output is wrong. time** because every `async` operation is awaited when called and there's no use of combinators such as `Task.WhenAll`.
 
 # The Root Cause
 
