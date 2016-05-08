@@ -8,7 +8,7 @@ html, body {
 }
 
 body {
-  font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif;
+  font-family: 'Open Sans', sans-serif;
   font-size: 16px;
   background: #222;
   color: #ddd;
@@ -167,7 +167,7 @@ ul.posts span {
 }
 
 .site .footer {
-  border-top: 4px solid #eee;
+  border-top: 4px solid #505050;
   clear: both;
   overflow: hidden;
 }
@@ -179,14 +179,7 @@ nav h1, nav h2 {
 #bio {
   margin-top: 10px;
   margin-bottom: 15px;
-  border: dotted #ddd;
-  border-width: 1px 0;
-}
-
-#series {
-  margin-top: 10px;
-  margin-bottom: 15px;
-  border-bottom: dotted #ddd;
+  border: dotted #505050;
   border-width: 1px 0;
 }
 
@@ -208,6 +201,7 @@ nav h1, nav h2 {
 
 .post_preheader {
     border-bottom: 1px solid #eee;
+    font-size: 14px;
 }
 
 #post pre {
@@ -244,11 +238,14 @@ nav h1, nav h2 {
 }
 
 .sidebar {
+  font-size: 14px;
   padding-top: 25px;
   font-family: "open sans", sans-serif;
 }
 
 .sidebar p {
+  margin-top: 5px;
+  margin-bottom: 10px
   font-weight: 200;
 }
 
@@ -256,9 +253,14 @@ nav h1, nav h2 {
   font-weight: 600;
 }
 
+.sidebar a img {
+  margin-bottom: 10px;
+  margin-left: initial;
+}
+
 .content {
   font: 400 16px/22px "open sans", sans-serif;
-  border-left: 1px solid #ddd;
+  border-left: 1px solid #505050;
   padding-left: 40px;
   padding-top: 25px;
   min-height: 400px;
@@ -269,7 +271,6 @@ nav h1, nav h2 {
   background-color: {{ site.data.theme.highlight_color }};
   height: 32px;
   width: 100%;
-  border-top: 32px solid white;
   overflow: hidden;
 }
 
