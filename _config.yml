@@ -1,13 +1,12 @@
 title: Bar Arnon's Blog
+name: Bar Arnon
 url: http://blog.i3arnon.com
 description: Acoustic Cheesecake
-email: i3arnon@gmail.com
 
 twitter_account: i3arnon
 github_account:  i3arnon
 stackoverflow_account: 885318
-
-paginate: 5
+google_analytics_key: UA-77401642-1
 
 # Handling Reading
 safe: true
@@ -26,3 +25,4 @@ excerpt_separator: <!--more-->
 
 # Outputting
 permalink: /:year/:month/:day/:title/
+paginate: 5

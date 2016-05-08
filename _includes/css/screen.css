@@ -184,6 +184,7 @@ nav h1, nav h2 {
 }
 
 .pagination {
+  font-size: 14px;
   border: solid #333;
   background-color: #121200;
   border-width: 1px 0;
