@@ -7,19 +7,22 @@ twitter_account: i3arnon
 github_account:  i3arnon
 stackoverflow_account: 885318
 
-highlighter: rouge
-markdown: kramdown
-excerpt_separator: <!--more-->
-
-permalink: /:year/:month/:day/:title/
-
 paginate: 5
 
+# Handling Reading
 safe: true
-lsi: false
-
 exclude:
   - CNAME
   - Gemfile
   - Gemfile.lock
   - README.md
+markdown_ext: "md"
+
+# Conversion
+markdown: kramdown
+highlighter: rouge
+lsi: false
+excerpt_separator: <!--more-->
+
+# Outputting
+permalink: /:year/:month/:day/:title/
