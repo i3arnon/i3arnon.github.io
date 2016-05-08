@@ -1,6 +1,7 @@
 ---
 layout: post
 title: On The Efficiency Of ValueTask
+description: ValueTask is a discriminated union of a T and a Task enabling allocation-free synchronous implementations of asynchronous operations.
 tags: [async-await, ValueTask, corefx, channels]
 ---
 

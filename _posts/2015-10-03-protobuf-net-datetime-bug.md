@@ -1,6 +1,7 @@
 ---
 layout: post
 title: Protobuf-net Is Broken Around DateTime
+description: Protobuf-net loses DateTime.Kind when deserializing which can mess with your DateTime values.
 tags: [protobuf-net, bug]
 ---
 

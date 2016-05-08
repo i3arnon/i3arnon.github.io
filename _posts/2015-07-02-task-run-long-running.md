@@ -1,6 +1,7 @@
 ---
 layout: post
 title: LongRunning Is Useless For Task.Run With async-await
+description: How do you pass TaskCreationOptions.LongRunning to Task.Run? You can't, and for async-await you shouldn't.
 tags: [.Net, async-await, LongRunning, Task.Factory.StartNew, Task.Run, TaskCreationOptions]
 ---
 
