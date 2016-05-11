@@ -74,7 +74,7 @@ public static class LogicalFlow
             if (!_isDisposed)
             {
                 StopScope();
-                            }
+            }
         }
     }
 }
