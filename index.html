@@ -5,10 +5,9 @@ layout: default
 <div id="home">
     <ul id="blog-posts" class="posts">
         {% for post in paginator.posts %}
-            <li><div class="post_preheader"><span>{{ post.date | date: "%B %-d, %Y" }}</span></div>
+            <li><div class="post_preheader"><span>{{ post.date | date: "%B %-d, %Y" }}</span></div></li>
             <li><div class="post_header"><a class="post-link" href="{{ post.url }}"><b>{{ post.title }}</b></a></div></li>
             <li>{{ post.excerpt }}</li>
-            <li><div class="post_separator"/div>
         {% endfor %}
     </ul>
 </div>

@@ -1,21 +1,12 @@
 ---
 layout: default
 ---
-<ul class="posts">
+<ul class="posts">          
+    <li><div class="post_preheader"><span>{{ page.date | date: "%B %-d, %Y" }}</span></div></li>
+    <li><div class="post_header"><b>{{ page.title }}</b></div></li>
     <li>
-        <div class="post_preheader">
-            <span>
-                {{ page.date | date: "%B %-d, %Y" }} 
-            </span>
-        </div>
-
-        <div class="post_header">
-            <b>{{ page.title }}</b>
-        </div>
-
         <div id="post">
             {{ content }}
-
             {% include disqus.html %}
         </div>
     </li>
