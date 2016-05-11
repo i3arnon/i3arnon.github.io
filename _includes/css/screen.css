@@ -204,6 +204,10 @@ nav h1, nav h2 {
     font-size: 14px;
 }
 
+.post_separator {
+    margin-bottom: 50px;
+}
+
 #post pre {
     /*
   border: 1px solid #333;
