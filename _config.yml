@@ -8,6 +8,8 @@ github_account:  i3arnon
 stackoverflow_account: 885318
 google_analytics_key: UA-77401642-1
 
+highlight_color: '#222'
+
 # Handling Reading
 safe: true
 exclude:

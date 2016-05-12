@@ -18,7 +18,7 @@ body {
 }
 
 .header {
-    background-color: {{ site.data.theme.highlight_color }};
+    background-color: {{ site.highlight_color }};
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -284,7 +284,7 @@ nav h1, nav h2 {
 
 .footer {
   color: #222;
-  background-color: {{ site.data.theme.highlight_color }};
+  background-color: {{ site.highlight_color }};
   height: 32px;
   width: 100%;
   overflow: hidden;
@@ -296,7 +296,7 @@ nav h1, nav h2 {
 }
 
 #home h2 {
-  color: {{ site.data.theme.highlight_color }};
+  color: {{ site.highlight_color }};
 }
 
 #avatar, #gravatar {
