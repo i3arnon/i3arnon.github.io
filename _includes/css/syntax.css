@@ -72,11 +72,12 @@ pre {
     white-space: pre;
     padding: 8px;
     overflow: auto;
+    margin-bottom: 15px;
 }
 code,
 pre {
     font-family: monospace;
-    font-size: 15px;
+    font-size: 16px;
 }
 
 pre>code {
