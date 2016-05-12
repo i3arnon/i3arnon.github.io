@@ -1,7 +1,6 @@
 ---
 layout: default
 ---
-
 <div id="home">
     <ul id="blog-posts" class="posts">
         {% for post in paginator.posts %}
@@ -16,11 +15,8 @@ layout: default
     {% if paginator.previous_page %}
         <a href="{{ paginator.previous_page_path }}" class="previous">Previous</a>
     {% endif %}
-
     <span class="page_number">Page: {{ paginator.page }} of {{ paginator.total_pages }}</span>
-
     {% if paginator.next_page %}
         <a href="{{ paginator.next_page_path }}" class="next">Next</a>
     {% endif %}
 </div>
-
