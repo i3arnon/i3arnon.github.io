@@ -1,5 +1,6 @@
 {
     "files.exclude": {
-        "_site": true
+        "_site": true,
+        "Gemfile.lock": true
     }
 }
