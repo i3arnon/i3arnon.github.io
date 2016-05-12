@@ -15,13 +15,20 @@
         <link href='//fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
         <link rel="alternate" type="application/atom+xml" title="{{ site.name }}" href="{{site.url}}/feed.xml" />
 
-        <link rel="stylesheet" href="/assets/css/all.css">
+        <link rel="stylesheet" href="/assets/css/main.css">
     </head>
     <body>
         {% include twitter-card.html %}
         
         <div class="header">
-            <h1 class="site_title"><a href="/" class="site_title">{{ site.title }}</a></h1>
+            <h1 class="site_title">
+                <a href="/" class="site_title">
+                    {{ site.title }}
+                    <span class="site_subtitle">
+                        {{ site.description }}
+                    </span>
+                </a>
+            </h1>
         </div>
 
         <div class="container">
