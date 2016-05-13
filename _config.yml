@@ -11,6 +11,9 @@ disqus_sitename: i3arnon
 
 highlight_color: '#222'
 
+gems:
+  - jekyll-sitemap
+
 # Handling Reading
 safe: true
 exclude:
