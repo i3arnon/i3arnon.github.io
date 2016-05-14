@@ -1,7 +1,7 @@
 title: Bar Arnon
-name: Bar Arnon
-url: http://blog.i3arnon.com
 description: Acoustic Cheesecake
+url: http://blog.i3arnon.com
+name: Bar Arnon
 
 twitter_account: i3arnon
 github_account:  i3arnon
@@ -9,10 +9,22 @@ stackoverflow_account: 885318
 google_analytics_key: UA-77401642-1
 disqus_sitename: i3arnon
 
-highlight_color: '#222'
-
 gems:
   - jekyll-sitemap
+
+# Theme
+highlight_color: '#222'
+
+# seo
+image: /assets/img/avatar.jpg 
+logo: /assets/img/avatar.jpg
+social:
+  links: 
+    - http://twitter.com/i3arnon
+    - http://linkedin.com/in/bararnon
+    # Not actually supported
+    - http://github.com/i3arnon
+    - http://stackoverflow.com/users/885318
 
 # Handling Reading
 safe: true
@@ -33,3 +45,4 @@ excerpt_separator: <!--more-->
 # Outputting
 permalink: /:year/:month/:day/:title/
 paginate: 5
+timezone: UTC

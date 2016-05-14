@@ -10,18 +10,14 @@
         {% else %}
             <title>{{ site.name }} | {{ site.description}}</title>
         {% endif %}
-        <meta name="author" content="{{ site.name }}" />
-        <meta name="description" content="{{ site.title }} | {{ site.description }}" />
-        <link rel="canonical" href="{{ site.url }}{{ page.url | replace:'index.html','' }}" />       
         <link rel="alternate" type="application/atom+xml" title="{{ site.name }}" href="{{site.url}}/feed.xml" />
         <link rel="stylesheet" href="/assets/css/main.css">
         <link href='//fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
-        
+        {% include seo.html %}
+        {% include twitter-card.html %}        
         {% include analytics.html %}
     </head>
     <body>
-        {% include twitter-card.html %}
-        
         <div class="header">
             <h1 class="site_title">
                 <a href="/" class="site_title">
