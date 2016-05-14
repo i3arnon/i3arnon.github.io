@@ -3,7 +3,9 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        {% if page.title %}
+        {% if page.tag %}
+            <title>{{ site.data.tags[page.tag].name }} | {{ site.name }}</title>
+        {% elsif page.title %}
             <title>{{ page.title }} | {{ site.name }}</title>
         {% else %}
             <title>{{ site.name }} | {{ site.description}}</title>
