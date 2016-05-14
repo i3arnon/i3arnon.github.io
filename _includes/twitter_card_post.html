@@ -1,0 +1,16 @@
+{% include twitter_card.html %}
+<meta name="twitter:title" content="{{ page.title }}">
+<meta name="twitter:description" content=
+  {% if page.description %}
+    "{{ page.description }}"
+  {% else %}
+    "{{ page.content | strip_html | xml_escape | truncate: 200 }}"
+  {% endif %}
+>
+<meta name="twitter:image" content=
+  {% if page.image %}
+    "{{ site.url }}/assets/img/{{ page.image }}"
+  {% else %}
+    "{{ site.url }}/assets/img/avatar.jpg"
+  {% endif %}
+>
