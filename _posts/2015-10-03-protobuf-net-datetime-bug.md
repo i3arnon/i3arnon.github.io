@@ -2,7 +2,7 @@
 layout: post
 title: Protobuf-net Is Broken Around DateTime
 description: Protobuf-net loses DateTime.Kind when deserializing which can mess with your DateTime values.
-tags: [protobuf-net, bug]
+tags: [protobuf-net, bugs]
 ---
 
 [Protocol Buffers](https://github.com/google/protobuf) by Google are a great mechanism for serializing (and deserializing) structured data in a very fast and efficient way. [Protobuf-net](https://github.com/mgravell/protobuf-net) is [Marc Gravell](https://twitter.com/marcgravell)'s port of Protocol Buffers for the .Net ecosystem.

@@ -1,8 +1,10 @@
 ---
 layout: default
 ---
+{% include post_tags.html %}
+
 <ul class="posts">          
-    <li><div class="post_preheader"><span>{{ page.date | date: "%B %-d, %Y" }}</span></div></li>
+    <li><div class="post_preheader"><span>{{ page.date | date: "%B %-d, %Y" }} | {{ tags_content }}</span></div></li>
     <li><div class="post_header">{{ page.title }}</div></li>
     <li>
         <div id="post">
