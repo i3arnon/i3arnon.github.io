@@ -16,6 +16,8 @@
         <link rel="alternate" type="application/atom+xml" title="{{ site.name }}" href="{{site.url}}/feed.xml" />
         <link rel="stylesheet" href="/assets/css/main.css">
         <link href='//fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+        
+        {% include analytics.html %}
     </head>
     <body>
         {% include twitter-card.html %}
@@ -40,8 +42,6 @@
                 {{ content }}
             </div>
         </div>
-
-        {% include analytics.html %}
 
         <div class="footer">
             {% include footer.html %}
