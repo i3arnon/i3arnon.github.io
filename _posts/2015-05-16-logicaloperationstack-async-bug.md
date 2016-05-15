@@ -1,7 +1,7 @@
 ---
 layout: post
 title: LogicalOperationStack Is Broken With async-await
-description: LogicalOperationStack enables having nested logical operation identifiers. It's broken with async in .Net 4.5 and above.
+description: LogicalOperationStack enables having nested logical operation identifiers. It's broken with async in .NET 4.5 and above.
 tags: [async-await, bugs]
 ---
 
@@ -166,8 +166,8 @@ public static class LogicalFlow
 }
 ```
 
-Another options is to to store the stack in the new [`System.Threading.AsyncLocal`](https://msdn.microsoft.com/en-us/library/dn906268%28v=vs.110%29.aspx) class added in .Net 4.6 (or [Stephen Cleary](http://www.stephencleary.com)'s [`AsyncLocal`](https://github.com/StephenCleary/AsyncLocal)) instead which should handle that issue correctly.
+Another options is to to store the stack in the new [`System.Threading.AsyncLocal`](https://msdn.microsoft.com/en-us/library/dn906268%28v=vs.110%29.aspx) class added in .NET 4.6 (or [Stephen Cleary](http://www.stephencleary.com)'s [`AsyncLocal`](https://github.com/StephenCleary/AsyncLocal)) instead which should handle that issue correctly.
 
-Note: This came after I asked (and answered) a question on Stack Overflow: [Is `LogicalOperationStack` incompatible with async in .Net 4.5](http://stackoverflow.com/a/30130663/885318) which contains further discussion.
+Note: This came after I asked (and answered) a question on Stack Overflow: [Is `LogicalOperationStack` incompatible with async in .NET 4.5](http://stackoverflow.com/a/30130663/885318) which contains further discussion.
 
 *[NDC]: Nested Diagnostic Context

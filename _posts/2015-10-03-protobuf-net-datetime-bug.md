@@ -5,9 +5,9 @@ description: Protobuf-net loses DateTime.Kind when deserializing which can mess 
 tags: [protobuf-net, bugs]
 ---
 
-[Protocol Buffers](https://github.com/google/protobuf) by Google are a great mechanism for serializing (and deserializing) structured data in a very fast and efficient way. [Protobuf-net](https://github.com/mgravell/protobuf-net) is [Marc Gravell](https://twitter.com/marcgravell)'s port of Protocol Buffers for the .Net ecosystem.
+[Protocol Buffers](https://github.com/google/protobuf) by Google are a great mechanism for serializing (and deserializing) structured data in a very fast and efficient way. [Protobuf-net](https://github.com/mgravell/protobuf-net) is [Marc Gravell](https://twitter.com/marcgravell)'s port of Protocol Buffers for the .NET ecosystem.
 
-While [being very efficient](http://theburningmonk.com/2011/08/performance-test-binaryformatter-vs-protobuf-net/), protobuf-net has a big issue when deserializing .Net's `DateTime`s. Behind the scenes `DateTime`s are converted into [Unix-Time](https://en.wikipedia.org/wiki/Unix_time) which is a count (of ticks in this case) starting from the Unix Epoch (1970/01/01 UTC). When deserializing back to .Net protobuf-net adds that count to a `DateTime` representing the Epoch-Time resulting in the correct `DateTime` value. The issue with this process is that it loses the `DateTime`'s original `DateTimeKind`.
+While [being very efficient](http://theburningmonk.com/2011/08/performance-test-binaryformatter-vs-protobuf-net/), protobuf-net has a big issue when deserializing .NET's `DateTime`s. Behind the scenes `DateTime`s are converted into [Unix-Time](https://en.wikipedia.org/wiki/Unix_time) which is a count (of ticks in this case) starting from the Unix Epoch (1970/01/01 UTC). When deserializing back to .NET protobuf-net adds that count to a `DateTime` representing the Epoch-Time resulting in the correct `DateTime` value. The issue with this process is that it loses the `DateTime`'s original `DateTimeKind`.
 <!--more-->
 [`DateTimeKind`](https://msdn.microsoft.com/en-us/library/shx7s921(v=vs.110).aspx) is an enum telling whether the `DateTime`'s value represents a local time, UTC time or unspecified. That value isn't serialized by protobuf-net so all `DateTime`s, be they local time or UTC, are deserialized as `DateTimeKind.Unspecified`.
 
@@ -32,7 +32,7 @@ class Sheep
 }
 ```
 
-This can get extremely problematic especially if you, like me, depend upon some library that uses `ToUniversalTime` or `ToLocalTime`. For me that library was the [.Net's MongoDB Driver](https://github.com/mongodb/mongo-csharp-driver) that stores all `DateTime`s in MongoDB in UTC. Using these 2 libraries together is impossible as `DateTime` values would keep changing value infinitely.
+This can get extremely problematic especially if you, like me, depend upon some library that uses `ToUniversalTime` or `ToLocalTime`. For me that library was the [.NET's MongoDB Driver](https://github.com/mongodb/mongo-csharp-driver) that stores all `DateTime`s in MongoDB in UTC. Using these 2 libraries together is impossible as `DateTime` values would keep changing value infinitely.
 
 [I have posted on the protobuf-net repository](https://github.com/mgravell/protobuf-net/issues/44#issuecomment-105433396) on github explaining this and managed to convince him to fix this problem (which he did with [this commit](https://github.com/mgravell/protobuf-net/commit/e601b359c6ae56afc159754d29f5e7d0f05a01f5)). However, this fix was made 5 months prior to me writing this post and there's still isn't a new release including the fix (the latest stable release is from 2013/09/30).
 
