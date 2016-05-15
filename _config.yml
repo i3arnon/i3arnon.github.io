@@ -16,7 +16,8 @@ gems:
 highlight_color: '#222'
 
 # seo
-image: /assets/img/avatar.jpg 
+image: /assets/img/avatar_big.jpg
+logo: /assets/img/logo.jpg
 social:
   links: 
     - http://twitter.com/i3arnon

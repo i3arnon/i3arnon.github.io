@@ -1,0 +1,26 @@
+{% assign seo_url = site.url %}
+{% assign seo_site_title = site.title %}
+{% assign seo_name = site.name %}
+{% assign seo_description = site.description %}
+{% assign seo_type = "WebSite" %}
+{% assign seo_links = site.social.links %}
+{% assign seo_image = site.image | prepend: seo_url %}
+
+<meta property="og:title" content="{{ seo_title }}" />
+<meta name="description" content="{{ seo_description }}" />
+<meta property="og:description" content="{{ seo_description }}" />
+<link rel="canonical" href="{{ seo_url }}" />
+<meta property="og:url" content="{{ seo_url }}" />
+<meta property="og:site_name" content="{{ seo_title }}" />
+<meta property="og:image" content="{{ seo_image }}" />
+<script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": {{ seo_type | jsonify }},
+    "name": {{ seo_name | jsonify }},
+    "image": {{ seo_image | jsonify }},
+    "description": {{ seo_description | jsonify }},
+    "sameAs": {{ seo_links | jsonify }},
+    "url": {{ seo_url | jsonify }}
+  }
+</script>

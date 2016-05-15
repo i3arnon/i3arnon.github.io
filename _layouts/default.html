@@ -1,16 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
+        <meta charset="utf-8">  
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="alternate" type="application/atom+xml" title="{{ site.name }}" href="{{site.url}}/feed.xml" />
+        <link rel="stylesheet" href="/assets/css/main.css">
+        <link href='//fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
         {% if page.tag %}
             {% assign is_tag = true %}
         {% elsif page.date %}
             {% assign is_post = true %}
         {% endif %}
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="alternate" type="application/atom+xml" title="{{ site.name }}" href="{{site.url}}/feed.xml" />
-        <link rel="stylesheet" href="/assets/css/main.css">
-        <link href='//fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+        
         {% if is_tag %}
             <title>{{ site.data.tags[page.tag].name }} | {{ site.name }}</title>
         {% elsif is_post %}
@@ -18,12 +19,14 @@
         {% else %}
             <title>{{ site.name }} | {{ site.description}}</title>
         {% endif %}
+        
         {% if is_post %}
-            {% include twitter_card_post.html %}        
+            {% include twitter_card_post.html %}
+            {% include seo_post.html %}        
         {% else %}
             {% include twitter_card_site.html %}
+            {% include seo_site.html %}       
         {% endif %}
-        {% include seo.html %}
         {% include analytics.html %}
     </head>
     <body>
