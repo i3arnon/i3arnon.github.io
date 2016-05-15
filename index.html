@@ -8,6 +8,7 @@ layout: default
             <li><div class="post_preheader"><span>{{ post.date | date: "%B %-d, %Y" }} | {{ tags_content }}</span></div></li>
             <li><div class="post_header"><a class="post_link" href="{{ post.url }}">{{ post.title }}</a></div></li>
             <li>{{ post.excerpt }}</li>
+            <li><div class="post_separator"/div></li>
         {% endfor %}
     </ul>
 </div>
