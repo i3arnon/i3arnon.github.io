@@ -121,21 +121,20 @@ blockquote>:last-child {
 }
 
 a {
-  color: #49afef;
-  text-decoration: none;
+  color: #ddd;
+  text-decoration: underline;
 }
 
 a:visited {
-  color: #1a9aeb;
+  color: #ddd;  
 }
 
 a:hover {
-  color: #49afef;
-  text-decoration: none;
+  color: #ddd;  
 }
 
 .post_link, a.post_link {
-    color: #fff;
+    text-decoration: none;
 }
 
 table {
@@ -265,7 +264,6 @@ nav h1, nav h2 {
 }
 
 .sidebar a {
-  font-weight: 600;
 }
 
 .sidebar a img {
