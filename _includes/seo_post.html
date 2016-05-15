@@ -8,9 +8,9 @@
 {% assign seo_page_image = site.image | prepend: seo_url %}
 {% assign seo_page_image_height = 1844 %}
 {% assign seo_page_image_width = 1844 %}
-{% assign seo_logo = site.logo | prepend: seo_url %}
+{% assign seo_logo = site.data.seo.logo | prepend: seo_url %}
 {% assign seo_logo_height = 60 %}
-{% assign seo_logo_width = 207 %}
+{% assign seo_logo_width = 249 %}
 
 <meta property="og:title" content="{{ seo_page_title }}" />
 <meta name="description" content="{{ seo_description }}" />
@@ -54,8 +54,8 @@
         "logo": {
             "@type": "ImageObject",
             "url": {{ seo_logo | jsonify }},
-            "width": 600,
-            "height": 60
+            "width": {{ seo_logo_width | jsonify }},
+            "height": {{ seo_logo_height | jsonify }}
         }
     },
     "mainEntityOfPage":{
