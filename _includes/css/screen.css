@@ -133,6 +133,11 @@ a:hover {
   color: #ddd;  
 }
 
+a.tag_link {
+  color: #aaa;
+  text-decoration: none;
+}
+
 .post_link, a.post_link {
     text-decoration: none;
 }
