@@ -6,12 +6,12 @@
 {% assign seo_links = site.social.links %}
 {% assign seo_image = site.image | prepend: seo_url %}
 
-<meta property="og:title" content="{{ seo_title }}" />
+<meta property="og:title" content="{{ seo_site_title }}" />
 <meta name="description" content="{{ seo_description }}" />
 <meta property="og:description" content="{{ seo_description }}" />
 <link rel="canonical" href="{{ seo_url }}" />
 <meta property="og:url" content="{{ seo_url }}" />
-<meta property="og:site_name" content="{{ seo_title }}" />
+<meta property="og:site_name" content="{{ seo_site_title }}" />
 <meta property="og:image" content="{{ seo_image }}" />
 <script type="application/ld+json">
   {
