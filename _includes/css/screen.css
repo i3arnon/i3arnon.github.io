@@ -53,10 +53,9 @@ h1.title {
     color: #ffffff;
 }
 
-.site_subtitle{
-    font-size: 14px;
-    color: #cecece;
-    padding-left: 5px;
+#site_logo {
+  height: 45px;
+  display: inline;
 }
 
 h1 {
