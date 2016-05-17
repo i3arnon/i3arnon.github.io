@@ -6,7 +6,7 @@ tags: [async-await, value-task, corefx, channels]
 ---
 
 The [corefxlab](https://github.com/dotnet/corefxlab ".NET Core Lab") repository contains library suggestions for [corefx](https://github.com/dotnet/corefx ".NET Core Libraries") which itself is a repo containing the .NET Core foundational libraries.  One of the gems hidden among these libraries is `ValueTask<T>` that was added by [Stephen Toub](https://github.com/stephentoub "stephentoub") as part of the [`System.Threading.Tasks.Channels`](https://github.com/dotnet/corefxlab/blob/master/src/System.Threading.Tasks.Channels/README.md) library but may be extremely useful on its own. The full implementation of `ValueTask<T>` can be found [here](//github.com/dotnet/corefx/blob/master/src/System.Threading.Tasks.Extensions/src/System/Threading/Tasks/ValueTask.cs), but this is an interesting subset of the API:
-
+<!--more-->
 ```csharp
 public struct ValueTask<TResult>
 {
@@ -22,7 +22,6 @@ public struct ValueTask<TResult>
     // ...
 }
 ```
-<!--more-->
 I first noticed `ValueTask<T>` in the API documentation when reviewing the channels PR made to corefxlab. [I suggested adding a short explanation](https://github.com/dotnet/corefxlab/pull/335#issuecomment-149829696) which Stephen quickly provided:
 
 > "`ValueTask<T>` is a discriminated union of a `T` and a `Task<T>`, making it allocation-free for `ReadAsync<T>` to synchronously return a `T` value it has available (in contrast to using `Task.FromResult<T>`, which needs to allocate a `Task<T>` instance). `ValueTask<T>` is awaitable, so most consumption of instances will be indistinguishable from with a `Task<T>`."

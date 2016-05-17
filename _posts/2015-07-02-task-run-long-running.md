@@ -8,9 +8,9 @@ tags: [async-await, long-running, task-factory-startnew, task-run, task-creation
 Back in the olden days of .NET 4.0 we didn't have `Task.Run`. All we had to start a task was the complicated `Task.Factory.StartNew`. Among its parameters there's a `TaskCreationOptions` often used to specify `TaskCreationOptions.LongRunning`. That flag gives TPL a hint that the task you're about to execute will be longer than usual.
 
 Nowadays with .NET 4.5 and above we mostly use the simpler and safer `Task.Run` but it isn't uncommon to wonder how do you pass `TaskCreationOptions.LongRunning` as a parameter like we used to do with `Task.Factory.StartNew`.
-
-The answer is that **you can't**. This of course isn't limited just to `TaskCreationOptions.LongRunning`. You can't pass any of the `TaskCreationOptions` values. However most of them (like `TaskCreationOptions.AttachedToParent`) are there for extremely esoteric cases while `TaskCreationOptions.LongRunning` is there for your run-of-the-mill long running task.
 <!--more-->
+The answer is that **you can't**. This of course isn't limited just to `TaskCreationOptions.LongRunning`. You can't pass any of the `TaskCreationOptions` values. However most of them (like `TaskCreationOptions.AttachedToParent`) are there for extremely esoteric cases while `TaskCreationOptions.LongRunning` is there for your run-of-the-mill long running task.
+
 An often suggested workaround is to go back to `Task.Factory.StartNew`, which is perfectly fine for synchronous delegates (i.e. Action, `Func<T>`), however for asynchronous delegates (i.e. `Func<Task>`, `Func<Task<T>>`) there's the whole [`Task<Task>` confusion](http://stackoverflow.com/a/24777502/885318). Since `Task.Factory.StartNew` doesn't have specific overloads for async-await asynchronous delegates map to the `Func<T>` where T is a Task. That makes the return value a `Task<T>` where T is a Task, hence `Task<Task>`.
 
 The .NET team anticipated this issue and it can be easily solved by using [`TaskExtensions.Unwrap`](https://msdn.microsoft.com/en-us/library/dd780917(v=vs.110).aspx) (which is the accepted answer on [the relevant Stack Overflow question](http://stackoverflow.com/q/26921191/885318) [^1]):
