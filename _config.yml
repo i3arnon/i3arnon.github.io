@@ -44,5 +44,5 @@ excerpt_separator: <!--more-->
 
 # Outputting
 permalink: /:year/:month/:day/:title/
-paginate: 5
+paginate: 10
 timezone: UTC
