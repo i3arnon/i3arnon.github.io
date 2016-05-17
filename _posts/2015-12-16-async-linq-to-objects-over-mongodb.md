@@ -14,7 +14,8 @@ This year they released a complete rewrite of the driver with an async-only API.
 public interface IAsyncCursor<out TDocument> : IDisposable
 {
     IEnumerable<TDocument> Current { get; }
-    Task<bool> MoveNextAsync(CancellationToken cancellationToken = default(CancellationToken));
+    Task<bool> MoveNextAsync(
+        CancellationToken cancellationToken = default(CancellationToken));
 }
 ``` 
 
@@ -79,7 +80,8 @@ Here is the full code for the adapters:
 ```csharp
 public static class AsyncCursorSourceExtensions
 {
-    public static IAsyncEnumerable<T> ToAsyncEnumerable<T>(this IAsyncCursorSource<T> asyncCursorSource) => 
+    public static IAsyncEnumerable<T> ToAsyncEnumerable<T>(
+        this IAsyncCursorSource<T> asyncCursorSource) => 
         new AsyncEnumerableAdapter<T>(asyncCursorSource);
 
     private class AsyncEnumerableAdapter<T> : IAsyncEnumerable<T>
@@ -114,16 +116,21 @@ public static class AsyncCursorSourceExtensions
             {
                 _asyncCursor = await _asyncCursorSource.ToCursorAsync(cancellationToken);
             }
-            if (_batchEnumerator != null && _batchEnumerator.MoveNext())
+            
+            if (_batchEnumerator != null &&
+                _batchEnumerator.MoveNext())
             {
                 return true;
             }
-            if (_asyncCursor != null && await _asyncCursor.MoveNextAsync(cancellationToken))
+            
+            if (_asyncCursor != null &&
+                await _asyncCursor.MoveNextAsync(cancellationToken))
             {
                 _batchEnumerator?.Dispose();
                 _batchEnumerator = _asyncCursor.Current.GetEnumerator();
                 return _batchEnumerator.MoveNext();
             }
+            
             return false;
         }
 
