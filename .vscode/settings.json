@@ -1,4 +1,5 @@
 {
+    "editor.rulers": [90],
     "files.exclude": {
         "_site": true,
         "Gemfile.lock": true
