@@ -137,7 +137,8 @@ public static class LogicalFlow
     {
         get
         {
-            return CallContext.LogicalGetData("LogicalFlow") as ImmutableStack<Guid> ?? ImmutableStack.Create<Guid>();
+            return CallContext.LogicalGetData("LogicalFlow") as ImmutableStack<Guid> ??
+                ImmutableStack.Create<Guid>();
         }
         set
         {
@@ -156,14 +157,13 @@ public static class LogicalFlow
     
     public static IDisposable StartScope()
     {
-        LogicalStack = LogicalStack.Push(Guid.NewGuid()); // Here's where the CallContext is copied using copy-on-write
+        // Here's where the CallContext is copied using copy-on-write
+        LogicalStack = LogicalStack.Push(Guid.NewGuid());
         return new Stopper();
     }
     
-    private static void StopScope()
-    {
+    private static void StopScope() =>
         LogicalStack = LogicalStack.Pop();
-    }
 }
 ```
 

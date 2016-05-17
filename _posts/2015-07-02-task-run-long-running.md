@@ -48,7 +48,7 @@ protected internal override void QueueTask(Task task)
     else
     {
         // Normal handling for non-LongRunning tasks.
-        bool forceToGlobalQueue = ((task.Options & TaskCreationOptions.PreferFairness) != 0);
+        bool forceToGlobalQueue = (task.Options & TaskCreationOptions.PreferFairness) != 0;
         ThreadPool.UnsafeQueueCustomWorkItem(task, forceToGlobalQueue);
     }
 }

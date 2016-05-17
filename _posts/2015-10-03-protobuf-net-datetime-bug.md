@@ -17,7 +17,7 @@ While [being very efficient](http://theburningmonk.com/2011/08/performance-test-
 ```csharp
 static void Main()
 {
-    var dolly = new Sheep {DateOfBirth = new DateTime(1966, 07, 05, 11, 0, 0, DateTimeKind.Utc)};
+    var dolly = new Sheep { DateOfBirth = new DateTime(1966, 07, 05, 11, 0, 0, DateTimeKind.Utc) };
     Console.WriteLine(dolly.DateOfBirth.ToString("HH:mm:ss K")); // "11:00:00 Z" (Z means UTC)
 
     dolly = Serializer.DeepClone(dolly); // Serialize and deserialize using protobuf-net
@@ -44,7 +44,7 @@ typeof (BclHelpers).
     GetField("EpochOrigin", BindingFlags.NonPublic | BindingFlags.Static).
     SetValue(null, new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc));
 
-var dolly = new Sheep {DateOfBirth = new DateTime(1966, 07, 05, 11, 0, 0, DateTimeKind.Utc)};
+var dolly = new Sheep { DateOfBirth = new DateTime(1966, 07, 05, 11, 0, 0, DateTimeKind.Utc) };
 Console.WriteLine(dolly.DateOfBirth.ToString("HH:mm:ss K")); // "11:00:00 Z" (Z means UTC)
 
 dolly = Serializer.DeepClone(dolly); // Serialize and deserialize using protobuf-net

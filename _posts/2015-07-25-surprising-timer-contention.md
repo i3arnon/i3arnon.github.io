@@ -18,7 +18,11 @@ static void Main()
         {
             while (true)
             {
-                new Timer(_ => { }, null, TimeSpan.FromMilliseconds(100), Timeout.InfiniteTimeSpan);
+                new Timer(
+                    _ => { },
+                    null,
+                    TimeSpan.FromMilliseconds(100),
+                    Timeout.InfiniteTimeSpan);
             }
         }, TaskCreationOptions.LongRunning);
     }
@@ -39,7 +43,9 @@ internal bool Change(uint dueTime, uint period)
     lock (TimerQueue.Instance) // Global lock.
     {
         if (m_canceled)
-            throw new ObjectDisposedException(null, Environment.GetResourceString("ObjectDisposed_Generic"));
+            throw new ObjectDisposedException(
+                null,
+                Environment.GetResourceString("ObjectDisposed_Generic"));
 
         // prevent ThreadAbort while updating state
         try { }
@@ -54,8 +60,15 @@ internal bool Change(uint dueTime, uint period)
             }
             else
             {
-                if (FrameworkEventSource.IsInitialized && FrameworkEventSource.Log.IsEnabled(EventLevel.Informational, FrameworkEventSource.Keywords.ThreadTransfer))
-                    FrameworkEventSource.Log.ThreadTransferSendObj(this, 1, string.Empty, true);
+                if (FrameworkEventSource.IsInitialized &&
+                    FrameworkEventSource.Log.IsEnabled(
+                        EventLevel.Informational,
+                        FrameworkEventSource.Keywords.ThreadTransfer))
+                    FrameworkEventSource.Log.ThreadTransferSendObj(
+                        this,
+                        1,
+                        string.Empty,
+                        true);
 
                 success = TimerQueue.Instance.UpdateTimer(this, dueTime, period);
             }
@@ -84,7 +97,11 @@ For us the main issue was `CancellationTokenSource`s created with a `TimeSpan` u
 public class CollectiveTimer<T>
 {
     private readonly ConcurrentQueue<QueueItem> _queue;
-    public CollectiveTimer(Action<T> action, TimeSpan timeout, CancellationToken cancellationToken)
+    
+    public CollectiveTimer(
+        Action<T> action,
+        TimeSpan timeout,
+        CancellationToken cancellationToken)
     {
         _queue = new ConcurrentQueue<QueueItem>();
         Task.Run(async () =>
@@ -103,10 +120,10 @@ public class CollectiveTimer<T>
             }
         });
     }
-    public void Enqueue(T item)
-    {
+    
+    public void Enqueue(T item) =>
         _queue.Enqueue(new QueueItem(item, DateTime.UtcNow));
-    }
+    
     private sealed class QueueItem
     {
         public T Item { get; private set; }
