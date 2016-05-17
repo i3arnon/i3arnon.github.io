@@ -9,6 +9,7 @@ I've been working with MongoDB for the past few years and lately the guys behind
 
 This year they released a complete rewrite of the driver with an async-only API. Now since `IEnumerator` doesn't support asynchronous enumeration (because `MoveNext` is synchronous) they used their own enumerator interface called `IAsyncCursor` which looks like this:
 <!--more-->
+
 ```csharp
 public interface IAsyncCursor<out TDocument> : IDisposable
 {

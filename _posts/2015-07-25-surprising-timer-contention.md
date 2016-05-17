@@ -5,8 +5,9 @@ tags: [contention, lock, performance, timer]
 ---
 
 While profiling our application's performance we stumbled upon a surprising contention point inside `System.Threading.Timer` (I say surprising as `System.Threading.Timer` is the more appropriate timer for multi-threaded environments out of the available timers)
-<!--more-->
+
 This can be demonstrated by executing the following piece of code:
+<!--more-->
 
 ```csharp
 static void Main()

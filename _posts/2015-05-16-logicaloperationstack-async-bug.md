@@ -7,6 +7,7 @@ tags: [async-await, bugs]
 
 `Trace.CorrelationManager.LogicalOperationStack` enables having nested logical operation identifiers where the most common case is logging (NDC). Evidently it doesn't work with `async-await`.
 <!--more-->
+
 # The Issue
 
 Here's a simple example using `LogicalFlow`, my simple wrapper over the `LogicalOperationStack`:
