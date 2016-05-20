@@ -22,9 +22,6 @@ interactive-extensions:
 lock:
   name: lock
 
-long-running:
-  name: LongRunning
-
 mongodb:
   name: MongoDB
 
@@ -48,6 +45,6 @@ task-creation-options:
 
 timer:
   name: System.Threading.Timer
-  
+
 value-task:
   name: ValueTask
