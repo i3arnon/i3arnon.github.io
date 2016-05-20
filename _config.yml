@@ -10,6 +10,7 @@ google_analytics_key: UA-77401642-1
 disqus_sitename: i3arnon
 
 gems:
+  - jekyll-redirect-from
   - jekyll-sitemap
 
 # Theme
