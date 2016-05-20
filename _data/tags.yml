@@ -46,5 +46,11 @@ task-creation-options:
 timer:
   name: System.Threading.Timer
 
+tpl:
+  name: Task Parallel Library
+
+tpl-dataflow:
+  name: TPL Dataflow
+
 value-task:
   name: ValueTask
