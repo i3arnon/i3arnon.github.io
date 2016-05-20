@@ -70,6 +70,6 @@ Task task = Task.Run(async () =>
 ```
 
 [^1]: Which is the top result when searching for *"Task.Run and LongRunning"*.
-[^2]: Which could possibly change in the future.
+[^2]: Which could change in the future.
 
 *[TPL]: Task Parallel Library

@@ -35,7 +35,7 @@ async Task LinqToMongo()
 }
 ```
 
-Normally you would just cast the `IQueryable` into an `IEnumerable` (hopefully with `AsEnumerable`) and use LINQ to Objects which also supports deferred execution. However, since `IEnumerable` is synchronous doing that defeats the whole purpose of using async-await to begin with. You could also materialize the whole collection into memory and then use client-side filters but that can take too much memory and time.
+Normally you would just cast the `IQueryable` into an `IEnumerable` (hopefully with `AsEnumerable`) and use LINQ to Objects which also supports deferred execution. However, since `IEnumerable` is synchronous doing that defeats the whole purpose of using async-await to begin with. You could also materialize the entire collection into memory and then use client-side filters but that can take too much memory and time.
 
 A former coworker of mine ([Tsach Vayness](https://linkedin.com/in/tsachv "Tsach Vayness")) suggested finding an existing library with async LINQ to Objects support and plugging it into the MongoDB C# driver. That enables using all the LINQ to Objects operators over MongoDB. There are a few of these libraries and the best, in my opinion, is [Reactive Extensions' Interactive Extensions](https://github.com/Reactive-Extensions/Rx.NET#interactive-extensions "Rx.NET") ([Ix-Async on nuget.org](https://www.nuget.org/packages/Ix-Async/ "Ix-Async")).
 
