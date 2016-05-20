@@ -139,8 +139,12 @@ a.tag_link {
 }
 
 .post_link, a.post_link {
-    text-decoration: none;
-    color: #1a9aeb;
+  text-decoration: none;
+  color: #1a9aeb;
+}
+
+.list-group-item {
+  text-decoration: none;
 }
 
 table {
