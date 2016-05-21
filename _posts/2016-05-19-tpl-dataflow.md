@@ -2,7 +2,10 @@
 layout: post
 title: TPL Dataflow Is The Best Library You're Not Using
 description: TPL Dataflow is a concurrent actor library on top of the TPL. It's simple and efficient and not enough people are using it.
-tags: [tpl-dataflow, tpl, async-await]
+tags:
+    - tpl-dataflow
+    - tpl
+    - async-await
 published: false
 ---
 

@@ -2,7 +2,12 @@
 layout: post
 title: Async LINQ To Objects Over MongoDB
 description: The MongoDB C# driver has async LINQ to MongoDB support. This shows how to add async LINQ to Objects support over MongoDB using Rx's Ix.
-tags: [mongodb, async-await, reactive-extensions, interactive-extensions, async-enumerable]
+tags:
+    - mongodb
+    - async-await
+    - reactive-extensions
+    - interactive-extensions
+    - async-enumerable
 ---
 
 I've been working with MongoDB for the past few years and lately the guys behind the [C# driver](https://github.com/mongodb/mongo-csharp-driver "mongo-csharp-driver") are working on some interesting things, especially around async-await support.
