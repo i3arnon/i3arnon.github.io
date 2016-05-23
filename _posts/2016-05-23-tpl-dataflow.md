@@ -16,7 +16,7 @@ The basic building block in the Dataflow library is the `ActionBlock`. You simpl
 ```csharp
 var block = new ActionBlock<Hamster>(_ => _.Feed());
 
-foreach (var hamster in hamsters)
+foreach (Hamster hamster in hamsters)
 {
     block.Post(hamster);
 }
@@ -37,7 +37,7 @@ var block = new ActionBlock<Hamster>(
         MaxDegreeOfParallelism = Environment.ProcessorCount,
     });
 
-foreach (var hamster in hamsters)
+foreach (Hamster hamster in hamsters)
 {
     await block.SendAsync(hamster);
 }
