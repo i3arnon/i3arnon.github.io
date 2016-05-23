@@ -6,7 +6,6 @@ tags:
     - tpl-dataflow
     - tpl
     - async-await
-published: false
 ---
 
 [TPL Dataflow](https://msdn.microsoft.com/en-us/library/hh228603(v=vs.110).aspx) is an in-process actor library on top of the Task Parallel Library enabling more robust concurrent programming. It was first introduced in the async-ctp (the preview for async-await) but was eventually released as a standalone [nuget package](https://www.nuget.org/packages/Microsoft.Tpl.Dataflow). It abstracts away most of the hard work needed when building asynchronous and/or parallel processing code but I feel most people who might benefit from it aren't aware of it.
