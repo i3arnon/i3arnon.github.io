@@ -2,7 +2,11 @@
 layout: post
 title: LongRunning Is Useless For Task.Run With async-await
 description: How do you pass TaskCreationOptions.LongRunning to Task.Run? You can't, and for async-await you shouldn't.
-tags: [task-run, async-await, task-creation-options, task-factory-startnew]
+tags:
+    - task-run
+    - async-await
+    - task-creation-options
+    - task-factory-startnew]
 ---
 
 Back in the olden days of .NET 4.0 we didn't have `Task.Run`. All we had to start a task was the complicated `Task.Factory.StartNew`. Among its parameters there's a `TaskCreationOptions` often used to specify `TaskCreationOptions.LongRunning`. That flag gives TPL a hint that the task you're about to execute will be longer than usual.

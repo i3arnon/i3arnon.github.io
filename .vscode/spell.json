@@ -15,6 +15,7 @@
         "csharp",
         "Dataflow",
         "DateTime",
+        "deserialized",
         "deserializing",
         "enum",
         "enumerate",
