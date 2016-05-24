@@ -8,7 +8,7 @@ tags:
     - async-await
 ---
 
-[TPL Dataflow](https://msdn.microsoft.com/en-us/library/hh228603(v=vs.110).aspx) is an in-process actor library on top of the Task Parallel Library enabling more robust concurrent programming. It was first introduced in the async-ctp (the preview for async-await) but was eventually released as a standalone [nuget package](https://www.nuget.org/packages/Microsoft.Tpl.Dataflow). It abstracts away most of the hard work needed when building asynchronous and/or parallel processing code but I feel most people who might benefit from it aren't aware of it.
+[TPL Dataflow](https://msdn.microsoft.com/en-us/library/hh228603(v=vs.110).aspx) is an in-process actor library on top of the Task Parallel Library enabling more robust concurrent programming. It was first introduced in the [async-ctp](https://blogs.msdn.microsoft.com/csharpfaq/2010/10/28/whats-next-in-c-get-ready-for-async/) (the preview for async-await) but was eventually released as a standalone [nuget package](https://www.nuget.org/packages/Microsoft.Tpl.Dataflow). It abstracts away most of the hard work needed when building asynchronous and/or parallel processing code but I feel most people who might benefit from it aren't aware of it.
 <!--more-->
 
 A basic building block in the Dataflow library is the `ActionBlock`. You simply create it, tell it what to do, start posting items into it and wait untill it's done. It will buffer the items, start a task to process them sequentially (by default) and end the task when the buffer is empty. Here's a simple example:
