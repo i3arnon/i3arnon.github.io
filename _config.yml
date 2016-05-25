@@ -32,6 +32,7 @@ exclude:
   - CNAME
   - Gemfile
   - Gemfile.lock
+  - post-publish-checklist.md
   - README.md
   - Run.cmd
 markdown_ext: "md"

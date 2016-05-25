@@ -1,0 +1,6 @@
+ - Check IFTTT posts (twitter, reddit, facebook, linkedin)
+ - Post to hacker news
+ - Check RSS
+ - Add to SO info
+ - Add to SO Careers
+ - Post to facebook groups
