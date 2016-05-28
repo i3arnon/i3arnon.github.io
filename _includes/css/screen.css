@@ -308,3 +308,14 @@ nav h1, nav h2 {
 .home:hover {
   text-decoration: none;
 }
+
+ul.share-buttons{
+  display: inline;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.share-buttons li {
+  display: inline-block;
+}

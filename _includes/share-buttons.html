@@ -1,0 +1,37 @@
+<ul class="share-buttons">
+    <li>
+        <a href="https://twitter.com/intent/tweet?url={{ page.url | prepend: site.url }}&text={{ page.title }}&via={{ site.twitter_account }}"
+            target="_blank" 
+            title="Tweet">
+            <img src="/assets/img/share-buttons/Twitter.png">
+        </a>
+    </li>
+    <li>
+        <a href="http://www.reddit.com/submit?url={{ page.url | prepend: site.url }}&title={{ page.title }}"
+            target="_blank"
+            title="Submit to Reddit">
+            <img src="/assets/img/share-buttons/Reddit.png">
+        </a>
+    </li>
+    <li>
+        <a href="https://www.facebook.com/sharer/sharer.php?u={{ page.url | prepend: site.url }}&t={{ page.title }}"
+            title="Share on Facebook"
+            target="_blank">
+            <img src="/assets/img/share-buttons/Facebook.png">
+        </a>
+    </li>
+    <li>
+        <a href="https://plus.google.com/share?url={{ page.url | prepend: site.url }}"
+            title="Share on Google+""
+            target="_blank">
+            <img src="/assets/img/share-buttons/Google+.png">
+        </a>
+    </li>
+    <li>
+        <a href="https://getpocket.com/save?url={{ page.url | prepend: site.url }}&title={{ page.title }}"
+            title="Add to Pocket"
+            target="_blank">
+            <img src="/assets/img/share-buttons/Pocket.png">
+        </a>
+    </li>
+</ul>
