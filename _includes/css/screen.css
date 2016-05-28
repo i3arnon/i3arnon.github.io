@@ -227,37 +227,9 @@ nav h1, nav h2 {
     margin-bottom: 50px;
 }
 
-#post pre {
-    /*
-  border: 1px solid #333;
-  background-color: #eef;
-  color: #334;
-  padding: 0 .4em;
-  margin-bottom: 20px !important;
-  */
-}
-
 #post ul,
 #post ol {
   margin-left: 1.35em;
-}
-
-#post code {
-    /*
-  display: block;
-  overflow: auto;
-  white-space: pre;
-  background-color: #eef;
-  color: #334;
-  font-size: 85%;
-  padding: 0 .2em;
-  */
-}
-
-#post pre code {
-    /*
-  border: none;
-  */
 }
 
 .sidebar {
@@ -268,11 +240,8 @@ nav h1, nav h2 {
 
 .sidebar p {
   margin-top: 5px;
-  margin-bottom: 10px
+  margin-bottom: 10px;
   font-weight: 200;
-}
-
-.sidebar a {
 }
 
 .sidebar a img {
@@ -294,11 +263,6 @@ nav h1, nav h2 {
   height: 32px;
   width: 100%;
   overflow: hidden;
-}
-
-.aside {
-  font-size: 75%;
-  color: #666;
 }
 
 #home h2 {
@@ -335,14 +299,6 @@ nav h1, nav h2 {
   margin-right: 5px;
 }
 
-i.fa-hn {
-  font-family: "open sans", sans-serif;
-  text-align: center;
-  font-size: 18px !important;
-  position: relative;
-  color: white;
-}
-
 .home {
   font-size: 24px;
   float: right;
@@ -351,35 +307,4 @@ i.fa-hn {
 
 .home:hover {
   text-decoration: none;
-}
-
-.disclaimer p {
-  margin-top: 5px;
-  font-size: 11px;
-  text-align: center;
-}
-
-.footnotes {
-  font-size: 14px;
-  font-style: italic;
-}
-
-.icon-overlay {
-  font-size: 16px !important;
-  position: relative;
-  bottom: 27px;
-  left: 5px;
-  color: white;
-}
-
-.caption {
-  margin: 0 auto;
-  text-align: center;
-  font-size: smaller;
-  padding-bottom: 10px
-}
-
-sup {
-  vertical-align: super;
-  font-size: smaller;
 }
