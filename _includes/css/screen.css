@@ -121,9 +121,9 @@ blockquote>:last-child {
 }
 
 .share-button>svg {
-    width: 30px;
-    height: 30px;
-    margin: 7px;
+    width: 25px;
+    height: 25px;
+    margin: 5px;
     fill: #ddd;
 }
 
