@@ -120,6 +120,12 @@ blockquote>:last-child {
     height: 16px;
 }
 
+.share-button>svg {
+    width: 30px;
+    height: 30px;
+    margin: 10px;
+}
+
 a {
   color: #ddd;
   text-decoration: underline;
