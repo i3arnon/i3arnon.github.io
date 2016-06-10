@@ -4,7 +4,7 @@ url: http://blog.i3arnon.com
 name: Bar Arnon
 
 twitter_account: i3arnon
-github_account:  i3arnon
+github_account: i3arnon
 stackoverflow_account: 885318
 linkedin_account: bararnon
 google_analytics_key: UA-78241106-1
@@ -12,6 +12,9 @@ disqus_sitename: i3arnon
 
 gems:
   - jekyll-sitemap
+
+# Changed in _config-development.yml
+production: true
 
 # Theme
 highlight_color: '#222'
