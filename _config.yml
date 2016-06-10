@@ -15,7 +15,6 @@ production: true
 highlight_color: '#222'
 
 # Handling Reading
-safe: true
 exclude:
   - CNAME
   - Gemfile
@@ -26,12 +25,15 @@ exclude:
 markdown_ext: "md"
 
 # Conversion
-markdown: kramdown
-highlighter: rouge
-lsi: false
 excerpt_separator: <!--more-->
 
 # Outputting
 permalink: /:year/:month/:day/:title/
 paginate: 10
 timezone: UTC
+
+# GitHub Pages Configs
+highlighter: rouge
+markdown: kramdown
+lsi: false
+safe: true
