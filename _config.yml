@@ -8,9 +8,6 @@ image: /images/avatar.jpg
 gems:
   - jekyll-sitemap
 
-# Changed in _config-development.yml
-production: true
-
 # Theme
 highlight_color: '#222'
 

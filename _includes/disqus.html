@@ -1,4 +1,4 @@
-{% if site.data.accounts.disqus and site.production %}
+{% if site.data.accounts.disqus and jekyll.environment == "production" %}
     <div id="disqus_thread"></div>
         <script>
             (function() {
