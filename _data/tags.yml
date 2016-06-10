@@ -1,56 +1,38 @@
 async-await:
   name: async-await
-
 async-enumerable:
   name: AsyncEnumerable
-
 bugs:
   name: Bugs
-
 channels:
   name: System.Threading.Tasks.Channels
-
 contention:
   name: Contention
-
 corefx:
   name: .NET Core
-
 interactive-extensions:
   name: Ix
-
 lock:
   name: lock
-
 mongodb:
   name: MongoDB
-
 performance:
   name: Performance
-
 protobuf-net:
   name: Protobuf-net
-
 reactive-extensions:
   name: Rx
-
 task-factory-startnew:
   name: Task.Factory.StartNew
-
 task-run:
   name: Task.Run
-
 task-creation-options:
   name: TaskCreationOptions
-
 timer:
   name: System.Threading.Timer
-
 tpl:
   name: Task Parallel Library
-
 tpl-dataflow:
   name: TPL Dataflow
-
 value-task:
   name: ValueTask
