@@ -2,15 +2,8 @@
 {% assign seo_page_url = page.url | prepend: seo_url %}
 {% assign seo_site_title = site.title %}
 {% assign seo_page_title = page.title %}
-{% assign seo_name = site.name %}
 {% assign seo_description = page.description %}
-{% assign seo_type = "BlogPosting" %}
 {% assign seo_page_image = site.image | prepend: seo_url %}
-{% assign seo_page_image_height = 1844 %}
-{% assign seo_page_image_width = 1844 %}
-{% assign seo_logo = site.data.seo.logo | prepend: seo_url %}
-{% assign seo_logo_height = 60 %}
-{% assign seo_logo_width = 249 %}
 
 <meta property="og:title" content="{{ seo_page_title }}" />
 <meta name="description" content="{{ seo_description }}" />
@@ -27,40 +20,3 @@
 {% if page.previous.url %}
     <link rel="prev" href="{{ page.previous.url | prepend: seo_url }}" title="{{ page.previous.title | escape }}" />
 {% endif %}
-
-<script type="application/ld+json">
-  {
-    "@context": "http://schema.org",
-    "@type": {{ seo_type | jsonify }},
-    "name": {{ seo_name | jsonify }},
-    "headline": {{ seo_page_title | jsonify }},
-    "datePublished": {{ page.date | date_to_xmlschema | jsonify }},
-    "dateModified": {{ page.date | date_to_xmlschema | jsonify }},
-    "description": {{ seo_description | jsonify }},
-    "url": {{ seo_page_url | jsonify }},
-    "image": {
-        "@type": "ImageObject",
-        "url": {{ seo_page_image | jsonify }},
-        "height": {{ seo_page_image_height | jsonify }},
-        "width": {{ seo_page_image_width | jsonify }}
-    },
-    "author": {
-        "@type": "Person",
-        "name": {{ seo_name | jsonify }}
-    },
-    "publisher": {
-        "@type": "Organization",
-        "name": {{ seo_name | jsonify }},
-        "logo": {
-            "@type": "ImageObject",
-            "url": {{ seo_logo | jsonify }},
-            "width": {{ seo_logo_width | jsonify }},
-            "height": {{ seo_logo_height | jsonify }}
-        }
-    },
-    "mainEntityOfPage":{
-        "@type":"WebPage",
-        "@id": {{ seo_page_url | jsonify }}
-    }
-  }
-</script>

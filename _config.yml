@@ -2,6 +2,8 @@ title: Bar Arnon
 description: Acoustic Cheesecake
 url: http://blog.i3arnon.com
 name: Bar Arnon
+logo: /assets/img/barnon-white.png
+image: /assets/img/avatar.jpg
 
 twitter_account: i3arnon
 github_account: i3arnon
@@ -18,17 +20,6 @@ production: true
 
 # Theme
 highlight_color: '#222'
-
-# seo
-image: /assets/img/avatar_big.jpg
-logo: /assets/img/barnon-white.png
-social:
-  links: 
-    - http://twitter.com/i3arnon
-    - http://linkedin.com/in/bararnon
-    # Not actually supported
-    - http://github.com/i3arnon
-    - http://stackoverflow.com/users/885318
 
 # Handling Reading
 safe: true
