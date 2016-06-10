@@ -234,6 +234,10 @@ nav h1, nav h2 {
     margin-bottom: 50px;
 }
 
+#post {
+  border-bottom: 1px solid #505050;  
+}
+
 #post ul,
 #post ol {
   margin-left: 1.35em;
