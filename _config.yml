@@ -5,13 +5,6 @@ name: Bar Arnon
 logo: /images/barnon-white.png
 image: /images/avatar.jpg
 
-twitter_account: i3arnon
-github_account: i3arnon
-stackoverflow_account: 885318
-linkedin_account: bararnon
-google_analytics_key: UA-78241106-1
-disqus_sitename: i3arnon
-
 gems:
   - jekyll-sitemap
 

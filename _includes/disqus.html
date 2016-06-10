@@ -1,9 +1,9 @@
-{% if site.disqus_sitename and site.production %}
+{% if site.data.accounts.disqus and site.production %}
     <div id="disqus_thread"></div>
         <script>
             (function() {
             var d = document, s = d.createElement('script');
-            s.src = '//{{ site.disqus_sitename}}.disqus.com/embed.js';
+            s.src = '//{{ site.data.accounts.disqus }}.disqus.com/embed.js';
             s.setAttribute('data-timestamp', +new Date());
             (d.head || d.body).appendChild(s);
             })();
