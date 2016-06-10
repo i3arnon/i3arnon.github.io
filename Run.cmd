@@ -1,3 +1,3 @@
 rmdir _site /s /q
-start bundle exec jekyll serve
+start bundle exec jekyll serve --drafts
 exit
