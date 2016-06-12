@@ -1,3 +1,5 @@
+apm:
+  name: APM
 async-await:
   name: async-await
 async-enumerable:
@@ -10,6 +12,8 @@ contention:
   name: Contention
 corefx:
   name: .NET Core
+idisposable:
+  name: IDispable
 interactive-extensions:
   name: Ix
 lock:
