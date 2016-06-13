@@ -13,7 +13,7 @@ Those of you who are familiar with the [Asynchronous Programming Model (APM)](ht
 
 # Asynchronous Programming Model
 
-First, a short explanation on what APM even is. APM is a pattern for writing callback based asynchronous code. Almost all asynchronous code before .NET 4.5 and async-await was based on APM. It's a pattern where for each asynchronous operation there's a `BeginXXX` method and an `EndXXX` method (e.g. `BeginSend` and `EndSend`). `BeginXXX` accepts the operation's parameters and a callback to be invoked when the operation completes and returns an `IAsyncResult` representing the asynchronous operation. `EndXXX` (which is usually called inside the callback) accepts the same `IAsyncResult` returned from `BeginXXX` and returns the operation's result (if the operation hadn't completed yet the call will block until it does). Here's how it looks in code (I'll be using `UdpClient` for examples but it's the same for `TcpClient`, `Socket`, etc.):
+First, a short explanation on what APM even is. APM is a pattern for writing callback-based asynchronous code. Almost all asynchronous code before .NET 4.5 and async-await was based on APM. It's a pattern where for each asynchronous operation there's a `BeginXXX` method and an `EndXXX` method (e.g. `BeginSend` and `EndSend`). `BeginXXX` accepts the operation's parameters and a callback to be invoked when the operation completes and returns an `IAsyncResult` representing the asynchronous operation. `EndXXX` (which is usually called inside the callback) accepts the same `IAsyncResult` returned from `BeginXXX` and returns the operation's result (if the operation hadn't completed yet the call will block until it does). Here's how it looks in code (I'll be using `UdpClient` for examples but it's the same for `TcpClient`, `Socket`, etc.):
 
 ```csharp
 byte[] data = // ...
@@ -25,7 +25,7 @@ udpClient.BeginSend(
     {
         try
         {
-            udpClient.EndSend(asyncResult); // Observes exceptions
+            udpClient.EndSend(asyncResult); // Observe exceptions
             Console.WriteLine("Sent successfully");
         }
         catch (SocketException exception)
@@ -36,7 +36,7 @@ udpClient.BeginSend(
     null);
 ```
 
-It's important to call `EndXXX` even when the operation doesn't return a result to observe exceptions and to free up any resources that may be held as state.
+It's important to call `EndXXX` even when the operation doesn't return a result to observe exceptions.
 
 Nowadays asynchronous code is usually written with async-await and .NET offers task-returning methods next to the APM method for most BCL types. However, under the hood most of these methods are still APM methods covered up with a task-returning overload using `Task.Factory.FromAsync`. You can see, for example, in [`UdpClient.ReceiveAsync`](http://referencesource.microsoft.com/#System/net/System/Net/Sockets/UDPClient.cs,57ff640dfcb1cbf0) the calls to `BeginReceive` and `EndReceive`:
 
@@ -57,14 +57,17 @@ public Task<UdpReceiveResult> ReceiveAsync()
 
 # Cancellation
 
-These async methods (which are actually APM methods) usually don't accept a `CancellationToken` because it was only added in .NET 4.0 (if they do it may only have an effect [before the operation started](http://referencesource.microsoft.com/#mscorlib/system/io/stream.cs,716)) and rarely accept a timeout so they are [non-cancellable](http://blogs.msdn.com/b/pfxteam/archive/2012/10/05/how-do-i-cancel-non-cancelable-async-operations.aspx). What you usually do is just *pretend* as if they **were** cancellable by attaching a task to it that can be cancelled and abandoning the original task on cancellation, for example:
+These async methods (which are actually APM methods) usually don't accept a `CancellationToken` because it was only added in .NET 4.0 (if they do it may only have an effect [before the operation started](http://referencesource.microsoft.com/#mscorlib/system/io/stream.cs,716)) and rarely accept a timeout so they are [non-cancellable](http://blogs.msdn.com/b/pfxteam/archive/2012/10/05/how-do-i-cancel-non-cancelable-async-operations.aspx). What you usually do if a task gets "stuck" is just *pretend* as if they **were** cancellable by attaching a task to it that you can cancel and abandoning the original task on cancellation, for example:
 
 ```csharp
 static Task<UdpReceiveResult> ReceiveAsync(
     this UdpClient udpClient,
     CancellationToken cancellationToken)
 {
+    // Start the original operation
     Task<UdpReceiveResult> receiveTask = udpClient.ReceiveAsync();
+
+    // Add support for cancellation
     return receiveTask.WithCancellation(cancellationToken);
 }
 
@@ -72,7 +75,10 @@ static async Task<T> WithCancellation<T>(
     this Task<T> task,
     CancellationToken cancellationToken)
 {
+    // Create a self-cancelling TaskCompletionSource 
     var tcs = new TaskCompletionSourceWithCancellation<T>(cancellationToken);
+
+    // Wait for completion or cancellation
     Task<T> completedTask = await Task.WhenAny(task, tcs.Task);
     return await completedTask;
 }
@@ -100,7 +106,7 @@ So, for each of these "stuck" tasks you can either let it linger forever (AKA me
 
 # IDisposable Trumps APM
 
-Now, since calling `Dispose` on an `IDisposable` instance cleans all resources up and invoking `EndXXX` on that instance after `Dispose` has no effect since it throws an `ObjectDisposedException` immediately there's no reason to call `EndXXX` after cancellation to begin with, especially if these exceptions become a performance issue. You can't control the implementation of the task-returning wrapper, but you can create one of your own that does accept a `CancellationToken` but doesn't call `EndXXX` if the token is cancelled. That way you can abandon the non-cancellable "stuck" operation, dispose of the instance to clear resources and avoid the unnecessary `ObjectDisposedException`:
+Now, since calling `Dispose` on an `IDisposable` instance cleans all resources up and invoking `EndXXX` on that instance after `Dispose` has no effect as it throws an `ObjectDisposedException` immediately there's no reason to call `EndXXX` after cancellation to begin with, especially if these exceptions become a performance issue. You can't control the implementation of the task-returning wrapper, but you can create one of your own that does accept a `CancellationToken` but doesn't call `EndXXX` if the token is cancelled. That way you can abandon the non-cancellable "stuck" operation, dispose of the instance to clear resources and avoid the unnecessary `ObjectDisposedException`:
 
 ```csharp
 static Task<UdpReceiveResult> UnsafeReceiveAsync(
@@ -127,6 +133,7 @@ static Task<TResult> UnsafeFromAsync<TResult>(
     Func<IAsyncResult, TResult> endMethod,
     CancellationToken cancellationToken)
 {
+    // Create a self-cancelling TaskCompletionSource 
     var taskCompletionSource =
         new TaskCompletionSourceWithCancellation<TResult>(cancellationToken);
 
@@ -135,7 +142,7 @@ static Task<TResult> UnsafeFromAsync<TResult>(
         {
             try
             {
-                // Doesn't call endMethod if cancellation was requested
+                // Don't call endMethod if cancellation was requested
                 if (!cancellationToken.IsCancellationRequested)
                 {
                     taskCompletionSource.TrySetResult(endMethod(asyncResult));
@@ -157,7 +164,7 @@ static Task<TResult> UnsafeFromAsync<TResult>(
 }
 ```
 
-Keep in mind that this pattern is only appropriate in **extreme cases** where exception rate has been shown to be too high (hence the `Unsafe` prefix).
+Keep in mind that this pattern is only appropriate in **extreme cases** where the exception rate has been shown to be too high (hence the `Unsafe` prefix).
 
 # In Summary
 
