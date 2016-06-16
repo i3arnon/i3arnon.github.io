@@ -5,6 +5,8 @@ name: Bar Arnon
 logo: /images/barnon-white.png
 image: /images/avatar.jpg
 
+github_repo_url: https://github.com/i3arnon/i3arnon.github.io/
+
 gems:
   - jekyll-sitemap
 
