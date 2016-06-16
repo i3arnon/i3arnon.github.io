@@ -4,7 +4,7 @@ layout: default
 <div id="home">
     <ul id="blog-posts" class="posts">
         {% for post in paginator.posts %}
-            {% include post_tags.html %}
+            {% include post/tags.html %}
             <li><div class="post_preheader"><span>{{ post.date | date: "%B %-d, %Y" }} | {{ tags_content }}</span></div></li>
             <li><div class="post_header"><a class="post_link" href="{{ post.url }}">{{ post.title }}</a></div></li>
             <li>{{ post.excerpt }}</li>
