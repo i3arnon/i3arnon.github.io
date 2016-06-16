@@ -4,10 +4,11 @@ layout: default
 {% include post_tags.html %}
 
 <ul class="posts">          
-    <li><div class="post_preheader"><span>{{ page.date | date: "%B %-d, %Y" }} | {{ tags_content }}</span></div></li>
+    <li><div class="post_preheader"><span>{{ page.date | date: "%B %-d, %Y" }} | {{ tags_content }} | {% include comments_link.html %} | {% include edit.html %}</span></div></li>
     <li><div class="post_header">{{ page.title }}</div></li>
     <li><div id="post">{{ content }}</div></li>
     <li><div id="share-buttons">{% include share-buttons.html %}</div>
     <div id="comments">{% include disqus.html %}</div></li>
 </ul>
 
+{% include disqus_count.html %}
