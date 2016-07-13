@@ -18,7 +18,7 @@ The answer is that **you can't**. This of course isn't limited just to `TaskCrea
 
 An often suggested workaround is to go back to `Task.Factory.StartNew`, which is perfectly fine for synchronous delegates (i.e. Action, `Func<T>`), however for asynchronous delegates (i.e. `Func<Task>`, `Func<Task<T>>`) there's the whole [`Task<Task>` confusion](http://stackoverflow.com/a/24777502/885318). Since `Task.Factory.StartNew` doesn't have specific overloads for async-await asynchronous delegates map to the `Func<T>` where T is a Task. That makes the return value a `Task<T>` where T is a Task, hence `Task<Task>`.
 
-The .NET team anticipated this issue and it can be easily solved by using [`TaskExtensions.Unwrap`](https://msdn.microsoft.com/en-us/library/dd780917(v=vs.110).aspx) (which is the accepted answer on [the relevant Stack Overflow question](http://stackoverflow.com/q/26921191/885318) [^1]):
+The .NET team anticipated this issue and it can be easily solved by using [`TaskExtensions.Unwrap`](https://msdn.microsoft.com/en-us/library/dd780917(v=vs.110).aspx) (which is the accepted answer on [the relevant Stack Overflow question](http://stackoverflow.com/q/26921191/885318)):
 
 ```csharp
 Task<Task> task = Task.Factory.StartNew(async () =>
@@ -37,7 +37,7 @@ However that hides the actual issue which is:
 
 # Task.Run with TaskCreationOptions.LongRunning doesn't make sense for async-await.
 
-The internal implementation [^2] creates a new dedicated thread when you use `TaskCreationOptions.LongRunning`. Here's the code for [`ThreadPoolTaskScheduler.QueueTask`](http://referencesource.microsoft.com/#mscorlib/system/threading/Tasks/ThreadPoolTaskScheduler.cs,55):
+The internal implementation creates a new dedicated thread when you use `TaskCreationOptions.LongRunning`. Here's the code for [`ThreadPoolTaskScheduler.QueueTask`](http://referencesource.microsoft.com/#mscorlib/system/threading/Tasks/ThreadPoolTaskScheduler.cs,55):
 
 ```csharp
 protected internal override void QueueTask(Task task)
@@ -72,8 +72,5 @@ Task task = Task.Run(async () =>
     }
 });
 ```
-
-[^1]: Which is the top result when searching for *"Task.Run and LongRunning"*.
-[^2]: Which could change in the future.
 
 *[TPL]: Task Parallel Library
