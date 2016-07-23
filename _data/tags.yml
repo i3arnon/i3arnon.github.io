@@ -26,6 +26,8 @@ protobuf-net:
   name: Protobuf-net
 reactive-extensions:
   name: Rx
+roslyn:
+  name: Roslyn
 task-factory-startnew:
   name: Task.Factory.StartNew
 task-run:
