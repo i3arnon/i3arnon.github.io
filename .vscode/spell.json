@@ -10,6 +10,7 @@
         "awaitable",
         "BatchBlock",
         "BufferBlock",
+        "cache",
         "cancellable",
         "CancellationTokenSource",
         "callbacks",
@@ -29,12 +30,14 @@
         "MongoDB",
         "non-cancellable",
         "nuget",
+        "refactor",
         "SendAsync",
         "serializing",
         "struct",
         "ThreadPool",
         "TPL",
         "TransformBlock",
+        "unhandled",
         "ValueTask"
     ],
     "mistakeTypeToStatus": {
