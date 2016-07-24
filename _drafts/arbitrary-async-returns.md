@@ -8,9 +8,9 @@ tags:
     - roslyn
 ---
 
-Since async-await was added to the C# language you could `await` any custom awaitable type as long as it follows a specific pattern: has a `GetAwaiter` method that returns an awaiter that in turn has `IsCompleted`, `OnCompleted` and `GetResult` (more on it [here](http://stackoverflow.com/a/28236920/885318)). But the language is stricter when it comes to the return type of an async method. You can only return 3 types from an async method: `void`, `Task` and `Task<T>`.
+Since async-await was added to C# 5.0 you could `await` any custom awaitable type as long as it follows a specific pattern: has a `GetAwaiter` method that returns an awaiter that in turn has `IsCompleted`, `OnCompleted` and `GetResult` (more on it [here](http://stackoverflow.com/a/28236920/885318)). But the language is stricter when it comes to the return type of an async method. You can only return 3 types from an async method: `void`, `Task` and `Task<T>`.
 
-`Task` is for async methods that don't have a result (i.e. procedures) while `Task<T>` is for async methods that return a result (i.e. functions). That leaves `async void` methods (or a-void as I like to call them) which mainly exist for backwards-compatibility with event handlers (the `void Button_Click(object sender, EventArgs e)` kind) and should be avoided elsewhere as unhandled exceptions inside them will crash the entire process.
+`Task` is for async methods that don't have a result (i.e. procedures) while `Task<T>` is for async methods that return a result (i.e. functions). That leaves `async void` methods which mainly exist for backwards-compatibility with event handlers (the `void Button_Click(object sender, EventArgs e)` kind) and should be avoided elsewhere as unhandled exceptions inside them will crash the entire process.
 <!--more-->
 
 These compiler rules [were recently expanded](https://github.com/dotnet/roslyn/pull/12518) to also allow returning any custom type from an async method as long as it follows a specific pattern. For example if you have a custom `HardTask<T>` type for these extra-hard tasks, in order to return it from an async method you would need:
