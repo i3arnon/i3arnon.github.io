@@ -71,7 +71,10 @@ class HamsterProvider
         // Kick off the asynchronous query
         Task<Hamster> task = _collection.Find(_ => _.Name == name).SingleAsync();
         // Cache the result when the query will complete
-        task.ContinueWith(_ => _dictionary.TryAdd(_.Result.Name, _.Result));
+        task.ContinueWith(antecedentTask => 
+        {
+            _dictionary.TryAdd(antecedentTask.Result.Name, antecedentTask.Result);
+        });
         // Return the not-yet-completed task for the caller to await
         return new ValueTask<Hamster>(task);
     }
