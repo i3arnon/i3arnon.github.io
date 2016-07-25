@@ -57,7 +57,7 @@ When using a cache most results are returned synchronously from the cache but fo
 class HamsterProvider
 {
     ConcurrentDictionary<string, Hamster> _dictionary; // ...
-    IMongoCollection<Hamster> _collection; // ...
+    IMongoCollection<Hamster> _hamsters; // ...
 
     public ValueTask<Hamster> GetHamsterAsync(string name)
     {
@@ -69,7 +69,7 @@ class HamsterProvider
         }
 
         // Kick off the asynchronous query
-        Task<Hamster> task = _collection.Find(_ => _.Name == name).SingleOrDefaultAsync();
+        Task<Hamster> task = _hamsters.Find(_ => _.Name == name).SingleOrDefaultAsync();
         // Add a continuation to cache the result after the query completed
         Task<Hamster> continuation = task.ContinueWith(completedTask => 
         {
@@ -95,7 +95,7 @@ Can be refactored into this much more readable code using async-await instead of
 class HamsterProvider
 {
     ConcurrentDictionary<string, Hamster> _dictionary; // ...
-    IMongoCollection<Hamster> _collection; // ...
+    IMongoCollection<Hamster> _hamsters; // ...
 
     public async ValueTask<Hamster> GetHamsterAsync(string name)
     {
@@ -107,7 +107,7 @@ class HamsterProvider
         }
 
         // Kick off and await the asynchronous query
-        hamster = await _collection.Find(_ => _.Name == name).SingleOrDefaultAsync();
+        hamster = await _hamsters.Find(_ => _.Name == name).SingleOrDefaultAsync();
         if (hamster == null)
         {
             throw new Exception($"Hamster named {hamster.Name} does not exist.");
