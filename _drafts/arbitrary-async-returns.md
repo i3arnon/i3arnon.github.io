@@ -69,14 +69,22 @@ class HamsterProvider
         }
 
         // Kick off the asynchronous query
-        Task<Hamster> task = _collection.Find(_ => _.Name == name).SingleAsync();
-        // Cache the result when the query will complete
-        task.ContinueWith(antecedentTask => 
+        Task<Hamster> task = _collection.Find(_ => _.Name == name).SingleOrDefaultAsync();
+        // Add a continuation to cache the result after the query completed
+        Task<Hamster> continuation = task.ContinueWith(completedTask => 
         {
-            _dictionary.TryAdd(antecedentTask.Result.Name, antecedentTask.Result);
+            Hamster result = completedTask.Result;
+            if (result == null)
+            {
+                throw new Exception($"Hamster named {result.Name} does not exist.");
+            }
+        
+            _dictionary.TryAdd(result.Name, result);
+            return result;
         });
-        // Return the not-yet-completed task for the caller to await
-        return new ValueTask<Hamster>(task);
+
+        // Return the not-yet-completed continuation for the caller to await
+        return new ValueTask<Hamster>(continuation);
     }
 }
 ```
@@ -99,7 +107,12 @@ class HamsterProvider
         }
 
         // Kick off and await the asynchronous query
-        hamster = await _collection.Find(_ => _.Name == name).SingleAsync();
+        hamster = await _collection.Find(_ => _.Name == name).SingleOrDefaultAsync();
+        if (hamster == null)
+        {
+            throw new Exception($"Hamster named {hamster.Name} does not exist.");
+        }
+
         // Cache the result
         _dictionary.TryAdd(hamster.Name, hamster);
         // Return the result
