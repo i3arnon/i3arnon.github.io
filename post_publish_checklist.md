@@ -1,8 +1,10 @@
+ - Purge CloudFlare cache
  - Check IFTTT posts (twitter, reddit, facebook, linkedin)
  - Set Blog flair on reddit posts
  - Post to hacker news
  - Post to r/programming
  - Check RSS in Feedly
+ - Suggest for The Week In .NET
  - Add to SO info
  - Add to SO Careers
  - Post to facebook groups
