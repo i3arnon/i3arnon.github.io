@@ -40,12 +40,13 @@ struct HardTaskMethodBuilder<TResult>
 }
 ```
 
- - A public static method named `CreateAsyncMethodBuilder` on the custom type that returns that method builder:
+ - An `AsyncMethodBuilderAttribute` on the custom type specifying the method builder to be used with it:
 
 ```csharp
+[AsyncMethodBuilder(typeof(HardTaskMethodBuilder<>))]
 class HardTask<TResult>
 {
-    public static HardTaskMethodBuilder<TResult> CreateAsyncMethodBuilder() { ... }
+    ...
 }
 ```
 
