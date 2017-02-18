@@ -33,7 +33,7 @@ I first noticed `ValueTask<T>` in the API documentation when reviewing the chann
 
 `ValueTask`, being a `struct`, enables writing async methods that do not allocate memory when they run synchronously without compromising API consistency. Imagine having an interface with a `Task` returning method. Each class implementing this interface must return a `Task` even if they happen to execute synchronously (hopefully using `Task.FromResult`). You can of course have 2 different methods on the interface, a synchronous one and an async one but this requires 2 different implementations to avoid ["sync over async"](http://blogs.msdn.com/b/pfxteam/archive/2012/04/13/10293638.aspx) and ["async over sync"](http://blogs.msdn.com/b/pfxteam/archive/2012/03/24/10287244.aspx).
 
-`ValueTask<T>` has implicit casts from both `T` and `Task<T>` (EDIT: The implicit casts [were removed](https://github.com/dotnet/corefx/commit/eecacdc6432036b8e44efa29f3a06d8c1c9cfeca) to prepare for arbitrary async returns) and can be awaited by itself which makes it extremely simple to use. Consider this possibly async provider API returning a `ValueTask<T>`:
+`ValueTask<T>` has implicit casts from both `T` and `Task<T>` (EDIT: The implicit casts [were removed](https://github.com/dotnet/corefx/commit/eecacdc6432036b8e44efa29f3a06d8c1c9cfeca) to prepare for [arbitrary async returns](/2016/07/25/arbitrary-async-returns/)) and can be awaited by itself which makes it extremely simple to use. Consider this possibly async provider API returning a `ValueTask<T>`:
 
 ```csharp
 interface IHamsterProvider
