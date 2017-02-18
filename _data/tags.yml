@@ -13,7 +13,7 @@ contention:
 corefx:
   name: .NET Core
 idisposable:
-  name: IDispable
+  name: IDisposable
 interactive-extensions:
   name: Ix
 lock:
