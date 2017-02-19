@@ -13,7 +13,7 @@ With async-await becoming more and more prevalent in modern code so has the need
 However, there's an issue with most implementations of the scoped async synchronization constructs: they usually return a task.
 <!--more-->
 
-Let's take `AsyncLock` built using a `SemaphoreSlim` as an example. Since a semphore limits the concurrent access to a resource to a certain degree a semphore of 1 is basically a lock. Here's a simple implementation (a more efficient one can be found [here](http://stackoverflow.com/a/21011273/885318)):
+Let's take `AsyncLock` built using a `SemaphoreSlim` as an example. Since a semaphore limits the concurrent access to a resource to a certain degree a semaphore of 1 is basically a lock. Here's a simple implementation (a more efficient one can be found [here](http://stackoverflow.com/a/21011273/885318)):
 
 ```csharp
 class AsyncLock
@@ -75,9 +75,9 @@ using (_lock.LockAsync())
 }
 ```
 
-The missing `await` means the code doesn't wait for the lock to be acquired and proceeds regardless so the lock doesn't lock anything and the critical section can be run concurrently. Usually when you don't await a `Task` inside an async method the compiler will warn you, but not in this case as the returned `Task` isn't abandonded and is being used by the using block.
+The missing `await` means the code doesn't wait for the lock to be acquired and proceeds regardless so the lock doesn't lock anything and the critical section can be run concurrently. Usually when you don't await a `Task` inside an async method the compiler will warn you, but not in this case as the returned `Task` isn't abandoned and is being used by the using block.
 
-It's trivially easy to include this bug in your code (I know I have) but quite difficult to realize that once you did, espeically since this will only blow up in runtime if you dispose of the task at the exact time when the lock is contended.
+It's trivially easy to include this bug in your code (I know I have) but quite difficult to realize that once you did, especially since this will only blow up in runtime if you dispose of the task at the exact time when the lock is contended.
 
 My simple solution is not to return `Task<IDisposable>` from async synchronization constructs, but a new awaitable named `TaskWrapper` that doesn't implement `IDisposable`. All `TaskWrapper` needs to do to be an awaitable is to return a valid awaiter, and it does so by returning the `TaskAwaiter` for the original underlying task:
 
@@ -95,7 +95,7 @@ struct TaskWrapper<T>
 }
 ```
 
-Since you can't return something other than `Task`/`Task<T>`/`void` from async methods (at least until C# 7.0 is released supporting [arbitrary async returns](/2016/07/25/arbitrary-async-returns/)) it's simpler to split `LockAsync` into 2 separate methods, an internal async one that actualy implements the locking logic and another that wraps the returned `Task<IDisposable>` with a `TaskWrapper<T>`:
+Since you can't return something other than `Task`/`Task<T>`/`void` from async methods (at least until C# 7.0 is released supporting [arbitrary async returns](/2016/07/25/arbitrary-async-returns/)) it's simpler to split `LockAsync` into 2 separate methods, an internal async one that actually implements the locking logic and another that wraps the returned `Task<IDisposable>` with a `TaskWrapper<T>`:
 
 ```csharp
 public TaskWrapper<IDisposable> LockAsync() =>
