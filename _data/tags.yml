@@ -12,6 +12,8 @@ contention:
   name: Contention
 corefx:
   name: .NET Core
+csharp7:
+  name: C# 7.0
 idisposable:
   name: IDisposable
 interactive-extensions:
