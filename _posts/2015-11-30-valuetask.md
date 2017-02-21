@@ -5,6 +5,7 @@ description: ValueTask is a discriminated union of a T and a Task enabling alloc
 tags:
     - value-task
     - async-await
+    - csharp7
     - channels
     - corefx
 ---
