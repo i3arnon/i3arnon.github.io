@@ -1,13 +1,13 @@
 ---
 layout: post
-title: LogicalOperationStack Is Broken With async-await
+title: LogicalOperationStack Is Broken With Async/Await
 description: LogicalOperationStack enables having nested logical operation identifiers. It's broken with async in .NET 4.5 and above.
 tags:
     - async-await
     - bugs
 ---
 
-`Trace.CorrelationManager.LogicalOperationStack` enables having nested logical operation identifiers where the most common case is logging (NDC). Evidently it doesn't work with `async-await`.
+`Trace.CorrelationManager.LogicalOperationStack` enables having nested logical operation identifiers where the most common case is logging (NDC). Evidently it doesn't work with async/await.
 <!--more-->
 
 # The Issue

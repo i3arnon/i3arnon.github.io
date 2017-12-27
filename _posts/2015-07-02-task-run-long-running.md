@@ -1,7 +1,7 @@
 ---
 layout: post
-title: LongRunning Is Useless For Task.Run With async-await
-description: How do you pass TaskCreationOptions.LongRunning to Task.Run? You can't, and for async-await you shouldn't.
+title: LongRunning Is Useless For Task.Run With Async/Await
+description: How do you pass TaskCreationOptions.LongRunning to Task.Run? You can't, and for async/await you shouldn't.
 tags:
     - task-run
     - async-await
@@ -16,7 +16,7 @@ Nowadays with .NET 4.5 and above we mostly use the simpler and safer `Task.Run` 
 
 The answer is that **you can't**. This of course isn't limited just to `TaskCreationOptions.LongRunning`. You can't pass any of the `TaskCreationOptions` values. However most of them (like `TaskCreationOptions.AttachedToParent`) are there for extremely esoteric cases while `TaskCreationOptions.LongRunning` is there for your run-of-the-mill long running task.
 
-An often suggested workaround is to go back to `Task.Factory.StartNew`, which is perfectly fine for synchronous delegates (i.e. Action, `Func<T>`), however for asynchronous delegates (i.e. `Func<Task>`, `Func<Task<T>>`) there's the whole [`Task<Task>` confusion](http://stackoverflow.com/a/24777502/885318). Since `Task.Factory.StartNew` doesn't have specific overloads for async-await asynchronous delegates map to the `Func<T>` where T is a Task. That makes the return value a `Task<T>` where T is a Task, hence `Task<Task>`.
+An often suggested workaround is to go back to `Task.Factory.StartNew`, which is perfectly fine for synchronous delegates (i.e. Action, `Func<T>`), however for asynchronous delegates (i.e. `Func<Task>`, `Func<Task<T>>`) there's the whole [`Task<Task>` confusion](http://stackoverflow.com/a/24777502/885318). Since `Task.Factory.StartNew` doesn't have specific overloads for async/await asynchronous delegates map to the `Func<T>` where T is a Task. That makes the return value a `Task<T>` where T is a Task, hence `Task<Task>`.
 
 The .NET team anticipated this issue and it can be easily solved by using [`TaskExtensions.Unwrap`](https://msdn.microsoft.com/en-us/library/dd780917(v=vs.110).aspx) (which is the accepted answer on [the relevant Stack Overflow question](http://stackoverflow.com/q/26921191/885318)):
 
@@ -35,7 +35,7 @@ Task actualTask = task.Unwrap();
 
 However that hides the actual issue which is:
 
-# Task.Run with TaskCreationOptions.LongRunning doesn't make sense for async-await.
+# Task.Run with TaskCreationOptions.LongRunning doesn't make sense for async/await.
 
 The internal implementation creates a new dedicated thread when you use `TaskCreationOptions.LongRunning`. Here's the code for [`ThreadPoolTaskScheduler.QueueTask`](http://referencesource.microsoft.com/#mscorlib/system/threading/Tasks/ThreadPoolTaskScheduler.cs,55):
 

@@ -9,7 +9,7 @@ tags:
     - roslyn
 ---
 
-Since async-await was added to C# 5.0 you could `await` any custom awaitable type as long as it follows a specific pattern: has a `GetAwaiter` method that returns an awaiter that in turn has `IsCompleted`, `OnCompleted` and `GetResult` (more on it [here](http://stackoverflow.com/a/28236920/885318)). But the language is stricter when it comes to the return type of an async method. You can only return 3 types from an async method: `void`, `Task` and `Task<T>`.
+Since async/await was added to C# 5.0 you could `await` any custom awaitable type as long as it follows a specific pattern: has a `GetAwaiter` method that returns an awaiter that in turn has `IsCompleted`, `OnCompleted` and `GetResult` (more on it [here](http://stackoverflow.com/a/28236920/885318)). But the language is stricter when it comes to the return type of an async method. You can only return 3 types from an async method: `void`, `Task` and `Task<T>`.
 
 `Task` is for async methods that don't have a result (i.e. procedures) while `Task<T>` is for async methods that return a result (i.e. functions). That leaves `async void` methods which mainly exist for backwards-compatibility with event handlers (the `void Button_Click(object sender, EventArgs e)` kind) and should be avoided elsewhere as unhandled exceptions inside them will crash the entire process.
 <!--more-->
@@ -25,7 +25,7 @@ struct HardTaskMethodBuilder<TResult>
         where TStateMachine : IAsyncStateMachine { ... }
     public void SetStateMachine(IAsyncStateMachine stateMachine) { ... }
     public void SetResult(TResult result) { ... }
-    public void SetException(Exception execption) { ... }
+    public void SetException(Exception exception) { ... }
     // Returns HardTask<TResult>, not Task<TResult>
     public HardTask<TResult> Task { get; }
     public void AwaitOnCompleted<TAwaiter, TStateMachine>(
@@ -53,7 +53,7 @@ class HardTask<TResult>
 
 The main driver behind this feature is performance as it will enable easier use of [`ValueTask<T>`](/2015/11/30/valuetask/) (which already [supports this feature](https://github.com/dotnet/corefx/pull/10201)). `ValueTask<T>` is a discriminated union of `T` for synchronous cases and `Task<T>` for asynchronous ones. By being a `struct` it keeps the synchronous case allocation-free and reduces GC pressure. This is useful for operations that usually complete synchronously but occasionally run asynchronously like async streams or async collections but the best example in my opinion are caches.
 
-When using a cache most results are returned synchronously from the cache but for the few cache-misses you usually need to do some I/O asynchronously. Before `ValueTask<T>` you could either create a new `Task<T>` instance in the synchronous case with `Task.FromResult` (which the GC now needs to collect) or complicate the code and cache the `Task` objects themselves. By returning a `ValueTask<T>` you can wrap a `T` result if it's available or a `Task<T>` if you need to execute an asynchronous operation to get it. Implementing this behavior is much easier with the help of the async-await "compiler magic". For example this `HamsterProvider` that holds a cache of `Hamster` objects returned from MongoDB:    
+When using a cache most results are returned synchronously from the cache but for the few cache-misses you usually need to do some I/O asynchronously. Before `ValueTask<T>` you could either create a new `Task<T>` instance in the synchronous case with `Task.FromResult` (which the GC now needs to collect) or complicate the code and cache the `Task` objects themselves. By returning a `ValueTask<T>` you can wrap a `T` result if it's available or a `Task<T>` if you need to execute an asynchronous operation to get it. Implementing this behavior is much easier with the help of the async/await "compiler magic". For example this `HamsterProvider` that holds a cache of `Hamster` objects returned from MongoDB:    
 
 ```csharp
 class HamsterProvider
@@ -91,7 +91,7 @@ class HamsterProvider
 }
 ```
 
-Can be refactored into this much more readable code using async-await instead of `Task.ContinueWith` without adding any allocations or degrading performance:
+Can be refactored into this much more readable code using async/await instead of `Task.ContinueWith` without adding any allocations or degrading performance:
 
 ```csharp
 class HamsterProvider

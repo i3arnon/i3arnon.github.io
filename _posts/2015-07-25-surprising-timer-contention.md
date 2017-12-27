@@ -93,7 +93,7 @@ By looking at this other part:
 
 I assume they could have created several of these native timers to reduce the contention (but maybe that's not the case).
 
-Now, you might say that you don't really create many of these timers, but a modern .NET server using async-await extensively creates many timers hidden away from sight. For example, every single call to `Task.Delay` creates a timer internally which is disposed when the task completes. It's also common to create a `CancellationTokenSource` that automatically cancels itself after a certain interval using an internal `Timer`.
+Now, you might say that you don't really create many of these timers, but a modern .NET server using async/await extensively creates many timers hidden away from sight. For example, every single call to `Task.Delay` creates a timer internally which is disposed when the task completes. It's also common to create a `CancellationTokenSource` that automatically cancels itself after a certain interval using an internal `Timer`.
 
 For us the main issue was `CancellationTokenSource`s created with a `TimeSpan` used to timeout our many (>100/s) I/O operations. Since the timeout for these was always the same I made a utility class that uses a single `Timer` and performs an action on all the items (`CancellationTokenSource`s in this case) that their timeout expired:
 

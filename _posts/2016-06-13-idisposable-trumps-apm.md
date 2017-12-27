@@ -13,7 +13,7 @@ Those of you who are familiar with the [Asynchronous Programming Model (APM)](ht
 
 # Asynchronous Programming Model
 
-First, a short explanation on what APM even is. APM is a pattern for writing callback-based asynchronous code. Almost all asynchronous code before .NET 4.5 and async-await was based on APM. It's a pattern where for each asynchronous operation there's a `BeginXXX` method and an `EndXXX` method (e.g. `BeginSend` and `EndSend`). `BeginXXX` accepts the operation's parameters and a callback to be invoked when the operation completes and returns an `IAsyncResult` representing the asynchronous operation. `EndXXX` (which is usually called inside the callback) accepts the same `IAsyncResult` returned from `BeginXXX` and returns the operation's result (if the operation hadn't completed yet the call will block until it does). Here's how it looks in code (I'll be using `UdpClient` for examples but it's the same for `TcpClient`, `Socket`, etc.):
+First, a short explanation on what APM even is. APM is a pattern for writing callback-based asynchronous code. Almost all asynchronous code before .NET 4.5 and async/await was based on APM. It's a pattern where for each asynchronous operation there's a `BeginXXX` method and an `EndXXX` method (e.g. `BeginSend` and `EndSend`). `BeginXXX` accepts the operation's parameters and a callback to be invoked when the operation completes and returns an `IAsyncResult` representing the asynchronous operation. `EndXXX` (which is usually called inside the callback) accepts the same `IAsyncResult` returned from `BeginXXX` and returns the operation's result (if the operation hadn't completed yet the call will block until it does). Here's how it looks in code (I'll be using `UdpClient` for examples but it's the same for `TcpClient`, `Socket`, etc.):
 
 ```csharp
 byte[] data = // ...
@@ -38,7 +38,7 @@ udpClient.BeginSend(
 
 It's important to call `EndXXX` even when the operation doesn't return a result to observe exceptions.
 
-Nowadays asynchronous code is usually written with async-await and .NET offers task-returning methods next to the APM method for most BCL types. However, under the hood most of these methods are still APM methods covered up with a task-returning overload using `Task.Factory.FromAsync`. You can see, for example, in [`UdpClient.ReceiveAsync`](http://referencesource.microsoft.com/#System/net/System/Net/Sockets/UDPClient.cs,57ff640dfcb1cbf0) the calls to `BeginReceive` and `EndReceive`:
+Nowadays asynchronous code is usually written with async/await and .NET offers task-returning methods next to the APM method for most BCL types. However, under the hood most of these methods are still APM methods covered up with a task-returning overload using `Task.Factory.FromAsync`. You can see, for example, in [`UdpClient.ReceiveAsync`](http://referencesource.microsoft.com/#System/net/System/Net/Sockets/UDPClient.cs,57ff640dfcb1cbf0) the calls to `BeginReceive` and `EndReceive`:
 
 ```csharp
 public Task<UdpReceiveResult> ReceiveAsync()
@@ -102,7 +102,7 @@ class TaskCompletionSourceWithCancellation<TResult> : TaskCompletionSource<TResu
 
 That's all well and good, but that original task (the one returned from `ReceiveAsync` in this case) is still out there holding on to some state and waiting to be completed. The `WithCancellation` extension only allows you as the consumer to move forward on cancellation but it can't actually abort the original task. The only way to get rid of it is to dispose of the instance itself (if it's `IDisposable`). Calling `Dispose` on the instance will go over all the pending operations and complete them by invoking all the callbacks. Since these callbacks almost always call `EndXXX` (or `EndReceive` in this case) and the instance was already disposed these tasks will end up with an `ObjectDisposedException` (which will eventually lead to an `UnobservedTaskException`).
 
-So, for each of these "stuck" tasks you can either let it linger forever (AKA memory leak) or clean it up with `Dispose` that results in an exception. Avoiding a memory leak is preferrable but too much of these exceptions (>50 per second) could easily hurt your performance.
+So, for each of these "stuck" tasks you can either let it linger forever (AKA memory leak) or clean it up with `Dispose` that results in an exception. Avoiding a memory leak is preferable but too much of these exceptions (>50 per second) could easily hurt your performance.
 
 # IDisposable Trumps APM
 

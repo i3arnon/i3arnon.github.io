@@ -1,7 +1,7 @@
 apm:
   name: APM
 async-await:
-  name: async-await
+  name: Async/Await
 async-enumerable:
   name: AsyncEnumerable
 bugs:

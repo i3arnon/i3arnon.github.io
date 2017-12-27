@@ -8,7 +8,7 @@ tags:
     - idisposable
 ---
 
-With async-await becoming more and more prevalent in modern code so has the need for async synchronization constructs. Unlike their synchronous counterparts (e.g. `Monitor`, `Mutex`, `ReaderWriterLock`, etc.) .NET doesn't offer almost any built-in asynchronous synchronization constructs, but it does contain the basic building blocks to build them on your own (mainly `Task`, `TaskCompletionSource<T>` and `SemaphoreSlim.WaitAsync`). [Stephen Toub](https://github.com/stephentoub) published a series of posts (over 5 years ago) on the [Parallel Framework team's blog](https://blogs.msdn.microsoft.com/pfxteam/) demonstrating that by building [`AsyncSemaphore`](https://blogs.msdn.microsoft.com/pfxteam/2012/02/12/building-async-coordination-primitives-part-5-asyncsemaphore/), [`AsyncLock`](https://blogs.msdn.microsoft.com/pfxteam/2012/02/12/building-async-coordination-primitives-part-6-asynclock/), [`AsyncReaderWriterLock`](https://blogs.msdn.microsoft.com/pfxteam/2012/02/12/building-async-coordination-primitives-part-7-asyncreaderwriterlock/) and more.
+With async/await becoming more and more prevalent in modern code so has the need for async synchronization constructs. Unlike their synchronous counterparts (e.g. `Monitor`, `Mutex`, `ReaderWriterLock`, etc.) .NET doesn't offer almost any built-in asynchronous synchronization constructs, but it does contain the basic building blocks to build them on your own (mainly `Task`, `TaskCompletionSource<T>` and `SemaphoreSlim.WaitAsync`). [Stephen Toub](https://github.com/stephentoub) published a series of posts (over 5 years ago) on the [Parallel Framework team's blog](https://blogs.msdn.microsoft.com/pfxteam/) demonstrating that by building [`AsyncSemaphore`](https://blogs.msdn.microsoft.com/pfxteam/2012/02/12/building-async-coordination-primitives-part-5-asyncsemaphore/), [`AsyncLock`](https://blogs.msdn.microsoft.com/pfxteam/2012/02/12/building-async-coordination-primitives-part-6-asynclock/), [`AsyncReaderWriterLock`](https://blogs.msdn.microsoft.com/pfxteam/2012/02/12/building-async-coordination-primitives-part-7-asyncreaderwriterlock/) and more.
 
 However, there's an issue with most implementations of the scoped async synchronization constructs: they usually return a task.
 <!--more-->
@@ -46,7 +46,7 @@ class AsyncLock
 While we could expose an API of `AsyncLock.AcquireAsync` and `AsyncLock.Release` to be used with a `try-finally` block:
 
 ```csharp
-await _lock.AcquirAsync();
+await _lock.AcquireAsync();
 try
 {
     // critical section...
