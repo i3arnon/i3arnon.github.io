@@ -21,13 +21,17 @@ static void Main()
 
 class FakeEnumerable
 {
-    public FakeEnumerator GetEnumerator() => new FakeEnumerator();
+    public FakeEnumerator GetEnumerator() =>
+        new FakeEnumerator();
 }
 
 struct FakeEnumerator
 {
-    public bool MoveNext() => throw new NotImplementedException();
-    public object Current => throw new NotImplementedException();
+    public bool MoveNext() =>
+        throw new NotImplementedException();
+
+    public object Current =>
+        throw new NotImplementedException();
 }
 ```
 
