@@ -78,7 +78,7 @@ foreach (IngredientBatch batch in ingredientBatches)
     pizzaMakerBlock.Post(batch);
 }
 
-pizzaMakerBlock.Complete() // Completion will propagate to the next block in the pipe
+pizzaMakerBlock.Complete(); // Completion will propagate to the next block in the pipe
 await deliveryBlock.Completion; // It's only necessary to wait for the last block
 ```
 
