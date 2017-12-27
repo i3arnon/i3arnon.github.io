@@ -7,6 +7,7 @@ tags:
 ---
 
 As some of you may know, many of the features in C# light up by using duck-typing. Duck-typing is where you accept an object that behaves in a certain way (i.e. has certain methods, properties, etc.) instead of a specific type or interface, or as is usually explained: "If it walks like a duck, and talks like a duck, it's a duck".
+<!--more-->
 
 The `foreach` statement for example, doesn't look for types that implement `IEnumerable`/`IEnumerable<T>` but instead expects a `GetEnumerator` method that returns some enumerator type (can be either `class` or `struct`) that has `MoveNext` and `Current`. So while the following code breaks in runtime the compiler has no issues with it:
 
