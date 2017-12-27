@@ -1,18 +1,18 @@
 ---
 layout: post
-title: Duck Typing, async-await And IEnumerable<Task>
-description: The C# compiler uses duck typing for async-await, which allows us to inject support for awaiting collections of tasks.
+title: Duck Typing And Async/Await
+description: The C# compiler uses duck typing for async/await, which allows us to inject support for awaiting collections of tasks.
 tags:
     - async-await
 ---
 
-As some of you may know, many of the features in C# light up by using duck-typing. Duck-typing is where you accept an object that behaves in a certain way (i.e. has certain methods, properties, etc.) instead of a specific type or interface, or as is usually explained: "If it walks like a duck, and talks like a duck, it's a duck".
+As some of you may know, many of the features in C# light up by "duck typing". Duck typing is where you accept an object that behaves in a certain way (i.e. has certain methods, properties, etc.) instead of a specific type, or as is usually explained: "If it walks like a duck, and talks like a duck, it's a duck".
 <!--more-->
 
-The `foreach` statement for example, doesn't look for types that implement `IEnumerable`/`IEnumerable<T>` but instead expects a `GetEnumerator` method that returns some enumerator type (can be either `class` or `struct`) that has `MoveNext` and `Current`. So while the following code breaks in runtime the compiler has no issues with it:
+The `foreach` statement for example, doesn't look for types that implement `IEnumerable`/`IEnumerable<T>` but instead expects a `GetEnumerator` method that returns some enumerator type (can be either a `class` or a `struct`) that has `MoveNext` and `Current`. So while the following code clearly breaks in runtime the compiler has no issues with it:
 
 ```csharp
-static void Main()
+static void Foo()
 {
     foreach (var item in new FakeEnumerable())
     {
@@ -36,7 +36,13 @@ struct FakeEnumerator
 }
 ```
 
-One of these features is async-await (or the Task-based Asynchronous Pattern). The compiler doesn't expect `Task` or `Task<T>` specifically, it looks for a `GetAwaiter` method that returns an awaiter that implements `INotifyCompletion` and has `IsCompleted`, `OnCompleted` and `GetResult`. `GetAwaiter` can also be an extension method so it's possible to make existing types awaitables with the right custom awaiter.
+One of these features is async/await (or the Task-based Asynchronous Pattern). The compiler doesn't expect `Task` or `Task<T>` specifically, it looks for a `GetAwaiter` method that returns an awaiter that in turn implements `INotifyCompletion` and has:
+
+- `IsCompleted`: Enables optimizations when the operation completes synchronously.
+- `OnCompleted`: Accepts the callback to invoke when the asynchronous operation completes.
+- `GetResult`: Returns the result of the operation (if there is one) and rethrows the exception if one occurred.
+
+`GetAwaiter` can also be an extension method so it's possible to turn existing types to awaitables with the right custom awaiter.
 
 I recently made such an awaiter to allow awaiting a collection of tasks together by calling `Task.WhenAll` and wrapping the returned `Task`'s awaiter:
 
@@ -87,4 +93,6 @@ static async Task DownloadAsync(string url)
 }
 ```
 
-This may be confusing for developers who aren't familiar enough with async-await so I can't recommend this as a best-practice, but if you're interested I added this supoort to my [AsyncUtilities](https://www.nuget.org/packages/AsyncUtilities/) library. It also has support for awaiting an`IEnumerable<Task<TResult>>`, disabling `SynchronizationContext` capturing with `ConfigureAwait` and it utilizes C# 7.2 `readonly struct`s. The code can be found [on github](https://github.com/i3arnon/AsyncUtilities/tree/master/src/AsyncUtilities/TaskEnumerableAwaiter).
+This may be confusing for developers who aren't familiar enough with async/await so I can't recommend this as a best-practice, but if you're still interested I added this support to my [AsyncUtilities](https://www.nuget.org/packages/AsyncUtilities/) library.
+
+It also has support for awaiting an `IEnumerable<Task<TResult>>`, disabling `SynchronizationContext` capturing with `ConfigureAwait` and it utilizes C# 7.2 `readonly struct`. The complete code can be found [on github](https://github.com/i3arnon/AsyncUtilities/tree/master/src/AsyncUtilities/TaskEnumerableAwaiter).
