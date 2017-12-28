@@ -68,9 +68,29 @@ static async Task DownloadAllAsync()
 
 It supports both `IEnumerable<Task>` & `IEnumerable<Task<TResult>>` and using `ConfigureAwait(false)` to avoid context capturing.
 
+## `CancelableTaskCompletionSource`
+
+When you're implementing asynchronous operations yourself you're usually dealing with `TaskCompletionSource` which allows returning an uncompleted task and completing it in the future with a result, exception or cancellation. `CancelableTaskCompletionSource` joins together a `CancellationToken` and a `TaskCompletionSource` by cancelling the `CancelableTaskCompletionSource.Task` when the `CancellationToken` is cancelled. This can be useful when wrapping pre async/await custom asynchronous implementations, for example:
+
+```csharp
+Task<string> OperationAsync(CancellationToken cancellationToken)
+{
+    var taskCompletionSource = new CancelableTaskCompletionSource<string>(cancellationToken);
+
+    StartAsynchronousOperation(result => taskCompletionSource.SetResult(result));
+
+    return taskCompletionSource.Task;
+}
+
+void StartAsynchronousOperation(Action<string> callback)
+{
+    // ...
+}
+```
+
 # Extension Methods
 
-## `Task.ContinueWithSynchronously`
+## `TaskExtensions.ContinueWithSynchronously`
 
 When implementing low-level async constructs, it's common to add a small continuation using `Task.ContinueWith` instead of using an async method (which adds the state machine overhead). To do that efficiently and safely you need the `TaskContinuationOptions.ExecuteSynchronously` and make sure it runs on the `ThreadPool`:
 
@@ -82,7 +102,7 @@ Task.Delay(1000).ContinueWith(
     TaskScheduler.Default);
 ```
 
-`Task.ContinueWithSynchronously` encapsulates that for you (with all the possible overloads):
+`TaskExtensions.ContinueWithSynchronously` encapsulates that for you (with all the possible overloads):
 
 ```csharp
 Task.Delay(1000).ContinueWithSynchronously(_ => Console.WriteLine("Done"));
