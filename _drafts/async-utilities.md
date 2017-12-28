@@ -13,7 +13,7 @@ I've recently (~6 months ago) started collecting various utility classes and ext
 
 ## `ValueTask`
 
-When writing async methods that usually complete synchronously `ValueTask<TResult>` can be used to avoid allocating a `Task<TResult>` instance in the synchronous case. There isn't a non-generic version of `ValueTask<TResult>` in the BCL. An explanation can be found in the [comments for `ValueTask<TResult>` in the corefx repository](https://github.com/dotnet/corefx/blob/master/src/System.Threading.Tasks.Extensions/src/System/Threading/Tasks/ValueTask.cs#L46):
+When writing async methods that usually complete synchronously `ValueTask<TResult>` can be used to avoid allocating a `Task<TResult>` instance in the synchronous case (I've written about it [here](http://blog.i3arnon.com/2015/11/30/valuetask/)). There isn't a non-generic version of `ValueTask<TResult>` in the BCL. An explanation can be found in the [comments for `ValueTask<TResult>` in the corefx repository](https://github.com/dotnet/corefx/blob/master/src/System.Threading.Tasks.Extensions/src/System/Threading/Tasks/ValueTask.cs#L46):
 
 > There is no non-generic version of `ValueTask<TResult>` as the `Task.CompletedTask` property may be used to hand back a successfully completed singleton in the case where a `Task`-returning method completes synchronously and successfully.
 
