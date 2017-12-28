@@ -1,7 +1,7 @@
 ---
 layout: post
 title: ConcurrentDictionary Is Not Always Thread-Safe
-description: The ConcurrentDictionary members are thread safe, but not when used through an one of the interfaces it implements.
+description: The ConcurrentDictionary members are thread safe, but not when used through  one of the interfaces it implements.
 tags:
     - bugs
 ---
@@ -58,7 +58,7 @@ public List(IEnumerable<T> collection) {
 
 It first gets the size of the dictionary by invoking `Count`, then initializes an array in that size and finally calls `CopyTo` to copy over all the `KeyValuePair` items from the dictionary to that array. Since the dictionary is mutated by multiple threads, the size can increase (or decrease) after `Count` is invoked but before `CopyTo` is. That will result in an `ArgumentException` when the `ConcurrentDictionary` tries to access the array outside its bounds.
 
-If you only needs a separate collection with the dictionary's items this exception can be avoided by calling the [`ConcurrentDictionary.ToArray` method](http://referencesource.microsoft.com/#mscorlib/system/Collections/Concurrent/ConcurrentDictionary.cs,692) instead, which operates in a similar way, but does so after acquiring all the dictionary's internal locks:
+If you just need a separate collection with the dictionary's items this exception can be avoided by calling the [`ConcurrentDictionary.ToArray` method](http://referencesource.microsoft.com/#mscorlib/system/Collections/Concurrent/ConcurrentDictionary.cs,692) instead, which operates in a similar way, but does so after acquiring all the dictionary's internal locks:
 
 ```csharp
 public KeyValuePair<TKey, TValue>[] ToArray()
@@ -88,7 +88,7 @@ public KeyValuePair<TKey, TValue>[] ToArray()
 }
 ```
 
-This method, however, shouldn't be confused with the LINQ's `Enumerable.ToArray` extension method, that may throw an `ArgumentException` just like `Enumerable.ToList`. `ConcurrentDictionary.ToArray` wins the overload resolution over `Enumerable.ToArray` since the latter is an extension method but if the dictionary is used through one of its interfaces (that inherits from `IEnumerable`) the `Enumerable.ToArray` method will be called and the exception may be thrown. So the following piece of code can't throw:
+This method, however, shouldn't be confused with LINQ's [`Enumerable.ToArray` extension method](http://referencesource.microsoft.com/#System.Core/System/Linq/Enumerable.cs,942), that may throw an `ArgumentException` just like `Enumerable.ToList`. `ConcurrentDictionary.ToArray` wins the overload resolution over `Enumerable.ToArray` since the latter is an extension method but if the dictionary is used through one of its interfaces (that inherits from `IEnumerable`) the `Enumerable.ToArray` method will be called and the exception may be thrown. So the following piece of code doesn't throw:
 
 ```csharp
 var dictionary = new ConcurrentDictionary<int, int>();
@@ -108,7 +108,7 @@ while (true)
 }
 ```
 
-But by specifically holding the dictionary in an `IDictionary` variable may:
+But explicitly holding the dictionary in an `IDictionary` variable does:
 
 ```csharp
 IDictionary<int, int> dictionary = new ConcurrentDictionary<int, int>();
