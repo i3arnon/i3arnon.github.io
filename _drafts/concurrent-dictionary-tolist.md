@@ -1,7 +1,7 @@
 ---
 layout: post
 title: ConcurrentDictionary Is Not Always Thread-Safe
-description: The ConcurrentDictionary members are thread safe, but not when used through  one of the interfaces it implements.
+description: The ConcurrentDictionary members are thread safe, but not when used through one of the interfaces it implements.
 tags:
     - bugs
 ---
