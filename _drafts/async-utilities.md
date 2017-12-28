@@ -50,15 +50,15 @@ async ValueTask<T> GetItemAsync<T>(string name)
 ```csharp
 static async Task DownloadAllAsync()
 {
-    var urls = new[]
+    string[] urls = new[]
     {
         "http://www.google.com",
         "http://www.github.com",
         "http://www.twitter.com"
     };
 
-    var httpClient = new HttpClient();
-    var strings = await urls.Select(url => httpClient.GetStringAsync(url));
+    HttpClient httpClient = new HttpClient();
+    string[] strings = await urls.Select(url => httpClient.GetStringAsync(url));
     foreach (var content in strings)
     {
         Console.WriteLine(content);
@@ -106,4 +106,31 @@ Task.Delay(1000).ContinueWith(
 
 ```csharp
 Task.Delay(1000).ContinueWithSynchronously(_ => Console.WriteLine("Done"));
+```
+
+## `TaskCompletionSourceExtensions.TryCompleteFromCompletedTask`
+
+When working with `TaskCompletionSource` it's common to copy the result (or exception/cancellation) of another task, usually returned from an async method. `TryCompleteFromCompletedTask` checks the task's state and complete the `TaskCompletionSource` accordingly. This can be used for example when there's a single worker executing the actual operations one at a time and completing `TaskCompletionSource` instances that consumers are awaiting:
+
+```csharp
+BlockingCollection<string> _urls;
+Queue<TaskCompletionSource<string>> _waiters;
+HttpClient _httpClient;
+
+async Task DownloadAllAsync()
+{
+    while (true)
+    {
+        await DownloadAsync(_urls.Take());
+    }
+}
+
+async Task DownloadAsync(string url)
+{
+    Task<string> downloadTask = _httpClient.GetStringAsync(url);
+    await downloadTask;
+
+    TaskCompletionSource<string> taskCompletionSource = _waiters.Dequeue();
+    taskCompletionSource.TryCompleteFromCompletedTask(downloadTask);
+}
 ```
