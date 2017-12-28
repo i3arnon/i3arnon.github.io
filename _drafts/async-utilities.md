@@ -8,6 +8,7 @@ tags:
 ---
 
 I've recently (~6 months ago) started collecting various utility classes and extension methods related to asynchronous programming into a library: [AsyncUtilities](https://github.com/i3arnon/AsyncUtilities). Since there already many useful tools in the BCL and in existing libraries out there these are quite on the fringe:
+<!--more-->
 
 # Utilities
 
