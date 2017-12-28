@@ -4,5 +4,11 @@
         ".jekyll-metadata": true,
         "_site": true,
         "Gemfile.lock": true
-    }
+    },
+    "cSpell.words": [
+        "LINQ's",
+        "cancellable",
+        "readonly",
+        "struct"
+    ]
 }
