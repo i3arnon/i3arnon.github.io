@@ -43,6 +43,31 @@ async ValueTask<T> GetItemAsync<T>(string name)
 }
 ```
 
+## `TaskEnumerableAwaiter`
+
+`TaskEnumerableAwaiter` is an awaiter for a collection of tasks. It makes the C# compiler support awaiting a collection of tasks directly instead of calling `Task.WhenAll` first:
+
+```csharp
+static async Task DownloadAllAsync()
+{
+    var urls = new[]
+    {
+        "http://www.google.com",
+        "http://www.github.com",
+        "http://www.twitter.com"
+    };
+
+    var httpClient = new HttpClient();
+    var strings = await urls.Select(url => httpClient.GetStringAsync(url));
+    foreach (var content in strings)
+    {
+        Console.WriteLine(content);
+    }
+}
+```
+
+It supports both `IEnumerable<Task>` & `IEnumerable<Task<TResult>>` and using `ConfigureAwait(false)` to avoid context capturing.
+
 # Extension Methods
 
 ## `Task.ContinueWithSynchronously`
