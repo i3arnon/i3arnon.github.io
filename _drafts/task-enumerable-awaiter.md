@@ -12,7 +12,7 @@ As some of you may know, many of the features in C# light up by "duck typing". D
 The `foreach` statement for example, doesn't look for types that implement `IEnumerable`/`IEnumerable<T>` but instead expects a `GetEnumerator` method that returns some enumerator type (can be either a `class` or a `struct`) that has `MoveNext` and `Current`. So while the following code clearly breaks in runtime the compiler has no issues with it:
 
 ```csharp
-static void Foo()
+void Foo()
 {
     foreach (var item in new FakeEnumerable())
     {
@@ -73,7 +73,7 @@ static class EnumerableExtensions
 The `GetAwaiter` extension method for `IEnumerable<Task>` returning this `TaskEnumerableAwaiter` means the compiler can treat a collection of tasks as an awaitable and await it just like any other task:
 
 ```csharp
-static async Task DownloadAllAsync()
+async Task DownloadAllAsync()
 {
     var urls = new []
     {
@@ -85,7 +85,7 @@ static async Task DownloadAllAsync()
     await urls.Select(DownloadAsync);
 }
 
-static async Task DownloadAsync(string url)
+async Task DownloadAsync(string url)
 {
     var httpClient = new HttpClient();
     var content = await httpClient.GetStringAsync(url);
