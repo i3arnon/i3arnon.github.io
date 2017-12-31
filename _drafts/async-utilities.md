@@ -44,6 +44,102 @@ async ValueTask<T> GetItemAsync<T>(string name)
 }
 ```
 
+## `AsyncLock`
+
+When awaiting async operations, there's no thread-affinity (by default). It's common to start the operation in a certain thread, and resume in another. For that reason, all synchronization constructs that are thread-affine (i.e. match the lock with a specific thread) can't be used in an async context. One of these is the simple `lock` statement (which actually uses `Monitor.Enter`, `Monitor.Exit`). For such a case I included `AsyncLock` which is a simple wrapper over a `SemaphoreSlim` of 1 (for now, at least):
+
+```csharp
+AsyncLock _lock = new AsyncLock();
+
+async Task ReplaceAsync<T>(string id, T newItem)
+{
+    using (var dbContext = new DBContext())
+    {
+        using (await _lock.LockAsync())
+        {
+            await dbContext.DeleteAsync(id);
+            await dbContext.InsertAsync(newItem);
+        }
+    }
+}
+```
+
+## `Striped`
+
+Lock striping is a technique used to reduce contention on a lock by splitting it up to multiple lock instances (*stripes*) with higher granularity where each key is associated with a certain lock/strip (this, for example, is how locks are used inside [`ConcurrentDictionary`](http://referencesource.microsoft.com/#mscorlib/system/Collections/Concurrent/ConcurrentDictionary.cs,f1cd2689b9df7f4a,references) to enable higher concurrency). Using a striped lock is similar in practice to using a `Dictionary<TKey, TLock>` however that forces the number of locks to match the number of keys, while `Striped` allows setting the concurrency level independently: A higher degree means more granularity but higher memory consumption and vice versa.
+
+### `Striped`
+
+The `Striped` generic class allows using any kind of lock (with any kind of key). The only necessary things are:
+
+- The number of stripes
+- The lock must have a parameterless constructor, or a delegate for creating it is supplied.
+- The key must implement `GetHashCode` and `Equals` correctly, or an `IEqualityComparer<TKey>` be supplied.
+
+```csharp
+ThreadSafeCache<string> _cache = new ThreadSafeCache<string>();
+Striped<string, object> _lock = Striped.Create<string, object>(Environment.ProcessorCount);
+
+string GetContent(string filePath)
+{
+    var content = _cache.Get(filePath);
+    if (content != null)
+    {
+        return content;
+    }
+
+    lock (_lock[filePath])
+    {
+        // Double-checked lock
+        content = _cache.Get(filePath);
+        if (content != null)
+        {
+            return content;
+        }
+
+        content = File.ReadAllText(filePath);
+        _cache.Set(content);
+        return content;
+    }
+}
+```
+
+### `StripedAsyncLock`
+
+Since this library is mainly for asynchronous programming, and you can't use a simple synchronous lock for async methods, there's also a concrete encapsulation for an async lock. It returns an `IDisposable` so it can be used in a `using` scope:
+
+```csharp
+ThreadSafeCache<string> _cache = new ThreadSafeCache<string>();
+StripedAsyncLock<string> _lock = new StripedAsyncLock<string>(stripes: 100);
+
+async Task<string> GetContentAsync(string filePath)
+{
+    var content = _cache.Get(filePath);
+    if (content != null)
+    {
+        return content;
+    }
+
+    using (await _lock.LockAsync(filePath))
+    {
+        // Double-checked lock
+        content = _cache.Get(filePath);
+        if (content != null)
+        {
+            return content;
+        }
+
+        using (var reader = File.OpenText(filePath))
+        {
+            content = await reader.ReadToEndAsync();
+        }
+
+        _cache.Set(content);
+        return content;
+    }
+}
+```
+
 ## `TaskEnumerableAwaiter`
 
 `TaskEnumerableAwaiter` is an awaiter for a collection of tasks. It makes the C# compiler support awaiting a collection of tasks directly instead of calling `Task.WhenAll` first:
