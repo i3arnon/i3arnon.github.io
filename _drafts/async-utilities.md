@@ -7,12 +7,28 @@ tags:
     - value-task
 ---
 
-I've recently (~6 months ago) started collecting various utility classes and extension methods related to asynchronous programming into a library: [AsyncUtilities](https://github.com/i3arnon/AsyncUtilities). Since there already many useful tools in the BCL and in existing libraries out there these are quite on the fringe:
+I've recently (~6 months ago) started collecting various slightly useful utility classes and extension methods related to asynchronous programming into a library: [AsyncUtilities](https://github.com/i3arnon/AsyncUtilities). Since there are already many useful tools in the BCL and in existing libraries out there these are quite on the fringe:
 <!--more-->
 
-# Utilities
+[Utilities:](#utilities)
 
-## `ValueTask`
+1. [ValueTask](#value-task)
+1. [AsyncLock](#async-lock)
+1. [Striped Lock](#striped-lock)
+1. [TaskEnumerableAwaiter](#task-enumerable-awaiter)
+1. [CancelableTaskCompletionSource](#cancelable-task-completion-source)
+
+[Extension Methods:](#extension-methods)
+
+1. [ContinueWithSynchronously](#continue-with-synchronously)
+1. [TryCompleteFromCompletedTask](#complete-from-completed-task)
+1. [ToCancellationTokenSource](#to-cancellation-token-source)
+
+---
+
+# <a name="utilities"/> Utilities:
+
+## <a name="value-task"/> `ValueTask` 
 
 When writing async methods that usually complete synchronously `ValueTask<TResult>` can be used to avoid allocating a `Task<TResult>` instance in the synchronous case (I've written about it [here](http://blog.i3arnon.com/2015/11/30/valuetask/)). There isn't a non-generic version of `ValueTask<TResult>` in the BCL. An explanation can be found in the [comments for `ValueTask<TResult>` in the corefx repository](https://github.com/dotnet/corefx/blob/master/src/System.Threading.Tasks.Extensions/src/System/Threading/Tasks/ValueTask.cs#L46):
 
@@ -44,7 +60,9 @@ async ValueTask<T> GetItemAsync<T>(string name)
 }
 ```
 
-## `AsyncLock`
+---
+
+## <a name="async-lock"/> `AsyncLock`
 
 When awaiting async operations, there's no thread-affinity (by default). It's common to start the operation in a certain thread, and resume in another. For that reason, all synchronization constructs that are thread-affine (i.e. match the lock with a specific thread) can't be used in an async context. One of these is the simple `lock` statement (which actually uses `Monitor.Enter`, `Monitor.Exit`). For such a case I included `AsyncLock` which is a simple wrapper over a `SemaphoreSlim` of 1 (for now, at least):
 
@@ -64,9 +82,11 @@ async Task ReplaceAsync<T>(string id, T newItem)
 }
 ```
 
-## `Striped`
+---
 
-Lock striping is a technique used to reduce contention on a lock by splitting it up to multiple lock instances (*stripes*) with higher granularity where each key is associated with a certain lock/strip (this, for example, is how locks are used inside [`ConcurrentDictionary`](http://referencesource.microsoft.com/#mscorlib/system/Collections/Concurrent/ConcurrentDictionary.cs,f1cd2689b9df7f4a,references) to enable higher concurrency). Using a striped lock is similar in practice to using a `Dictionary<TKey, TLock>` however that forces the number of locks to match the number of keys, while `Striped` allows setting the concurrency level independently: A higher degree means more granularity but higher memory consumption and vice versa.
+## <a name="striped-lock"/> Striped Lock
+
+Lock striping is a technique used to reduce contention on a lock by splitting it up to multiple lock instances (*stripes*) with higher granularity where each key is associated with a certain lock/strip (this, for example, is how locks are used inside [`ConcurrentDictionary`](http://referencesource.microsoft.com/#mscorlib/system/Collections/Concurrent/ConcurrentDictionary.cs,f1cd2689b9df7f4a,references) to enable higher concurrency). Using a striped lock is similar in practice to using a `Dictionary<TKey, TLock>` however that forces the number of locks to match the number of keys, while using a striped lock allows to set the concurrency level independently: A higher degree means more granularity but higher memory consumption and vice versa.
 
 ### `Striped`
 
@@ -140,7 +160,9 @@ async Task<string> GetContentAsync(string filePath)
 }
 ```
 
-## `TaskEnumerableAwaiter`
+---
+
+## <a name="task-enumerable-awaiter"/> `TaskEnumerableAwaiter`
 
 `TaskEnumerableAwaiter` is an awaiter for a collection of tasks. It makes the C# compiler support awaiting a collection of tasks directly instead of calling `Task.WhenAll` first:
 
@@ -165,7 +187,9 @@ static async Task DownloadAllAsync()
 
 It supports both `IEnumerable<Task>` & `IEnumerable<Task<TResult>>` and using `ConfigureAwait(false)` to avoid context capturing.
 
-## `CancelableTaskCompletionSource`
+---
+
+## <a name="cancelable-task-completion-source"/> `CancelableTaskCompletionSource`
 
 When you're implementing asynchronous operations yourself you're usually dealing with `TaskCompletionSource` which allows returning an uncompleted task and completing it in the future with a result, exception or cancellation. `CancelableTaskCompletionSource` joins together a `CancellationToken` and a `TaskCompletionSource` by cancelling the `CancelableTaskCompletionSource.Task` when the `CancellationToken` is cancelled. This can be useful when wrapping pre async/await custom asynchronous implementations, for example:
 
@@ -185,9 +209,11 @@ void StartAsynchronousOperation(Action<string> callback)
 }
 ```
 
-# Extension Methods
+---
 
-## `TaskExtensions.ContinueWithSynchronously`
+# <a name="extension-methods"/> Extension Methods:
+
+## <a name="continue-with-synchronously"/> `TaskExtensions.ContinueWithSynchronously`
 
 When implementing low-level async constructs, it's common to add a small continuation using `Task.ContinueWith` instead of using an async method (which adds the state machine overhead). To do that efficiently and safely you need the `TaskContinuationOptions.ExecuteSynchronously` and make sure it runs on the `ThreadPool`:
 
@@ -205,7 +231,9 @@ Task.Delay(1000).ContinueWith(
 Task.Delay(1000).ContinueWithSynchronously(_ => Console.WriteLine("Done"));
 ```
 
-## `TaskCompletionSourceExtensions.TryCompleteFromCompletedTask`
+---
+
+## <a name="complete-from-completed-task"/> `TaskCompletionSourceExtensions.TryCompleteFromCompletedTask`
 
 When working with `TaskCompletionSource` it's common to copy the result (or exception/cancellation) of another task, usually returned from an async method. `TryCompleteFromCompletedTask` checks the task's state and complete the `TaskCompletionSource` accordingly. This can be used for example when there's a single worker executing the actual operations one at a time and completing `TaskCompletionSource` instances that consumers are awaiting:
 
@@ -232,7 +260,9 @@ async Task DownloadAsync(string url)
 }
 ```
 
-## `TaskExtensions.ToCancellationTokenSource`
+---
+
+## <a name="to-cancellation-token-source"/> `TaskExtensions.ToCancellationTokenSource`
 
 It can sometimes be useful to treat an existing task as a signaling mechanism for cancellation, especially when that task doesn't represent a specific operation but an ongoing state. `ToCancellationTokenSource` creates a `CancellationTokenSource` that gets cancelled when the task completes.
 
@@ -263,3 +293,5 @@ async Task<IEnumerable<string>> DownloadAllAsync(IEnumerable<string> urls)
     return results;
 }
 ```
+
+---
