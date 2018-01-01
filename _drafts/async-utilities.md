@@ -231,3 +231,35 @@ async Task DownloadAsync(string url)
     taskCompletionSource.TryCompleteFromCompletedTask(downloadTask);
 }
 ```
+
+## `TaskExtensions.ToCancellationTokenSource`
+
+It can sometimes be useful to treat an existing task as a signaling mechanism for cancellation, especially when that task doesn't represent a specific operation but an ongoing state. `ToCancellationTokenSource` creates a `CancellationTokenSource` that gets cancelled when the task completes.
+
+For example, TPL Dataflow blocks have a `Completion` property which is a task to enable the block's consumer to await its completion. If we want to show a loading animation to represent the block's operation, we need to cancel it when the block completes and we know that happened when the `Completion` task completes:
+
+```csharp
+async Task<IEnumerable<string>> DownloadAllAsync(IEnumerable<string> urls)
+{
+    var results = new ConcurrentBag<string>();
+
+    var httpClient = new HttpClient();
+    var block = new ActionBlock<string>(async url =>
+    {
+        var result = await httpClient.GetStringAsync(url);
+        results.Add(result);
+    });
+
+    var cancellationToken = block.Completion.ToCancellationTokenSource().Token;
+    var loadingAnimation = new LoadingAnimation(cancellationToken);
+    loadingAnimation.Show();
+
+    foreach (var url in urls)
+    {
+        block.Post(url);
+    }
+
+    await block.Completion;
+    return results;
+}
+```
