@@ -73,6 +73,8 @@ public static class EnumerableExtensions
 The `GetAwaiter` extension method for `IEnumerable<Task>` returning this `TaskEnumerableAwaiter` means the compiler can treat a collection of tasks as an awaitable and await it just like any other task:
 
 ```csharp
+HttpClient _httpClient = new HttpClient();
+
 async Task DownloadAllAsync()
 {
     var urls = new []
@@ -87,8 +89,7 @@ async Task DownloadAllAsync()
 
 async Task DownloadAsync(string url)
 {
-    var httpClient = new HttpClient();
-    var content = await httpClient.GetStringAsync(url);
+    var content = await _httpClient.GetStringAsync(url);
     Console.WriteLine(content);
 }
 ```
