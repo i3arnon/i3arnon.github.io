@@ -6,7 +6,7 @@ tags:
     - async-await
 ---
 
-As some of you may know, many of the features in C# light up by "duck typing". Duck typing is where you accept an object that behaves in a certain way (i.e. has certain methods, properties, etc.) instead of a specific type, or as is usually explained: "If it walks like a duck, and talks like a duck, it's a duck".
+As some of you may know, many of the features in C# light up through "duck typing". Duck typing is where you accept an object that behaves in a certain way (i.e. has certain methods, properties, etc.) instead of a specific type, or as is usually explained: "If it walks like a duck, and talks like a duck, it's a duck".
 <!--more-->
 
 The `foreach` statement for example, doesn't look for types that implement `IEnumerable`/`IEnumerable<T>` but instead expects a `GetEnumerator` method that returns some enumerator type (can be either a `class` or a `struct`) that has `MoveNext` and `Current`. So while the following code clearly breaks in runtime the compiler has no issues with it:
@@ -44,7 +44,7 @@ One of these features is async/await (or the Task-based Asynchronous Pattern). T
 
 `GetAwaiter` can also be an extension method so it's possible to turn existing types to awaitables with the right custom awaiter.
 
-I recently made such an awaiter to allow awaiting a collection of tasks together by calling `Task.WhenAll` and wrapping the returned `Task`'s awaiter:
+I recently made such an awaiter for awaiting a collection of tasks together by calling `Task.WhenAll` and wrapping the returned `Task`'s awaiter:
 
 ```csharp
 struct TaskEnumerableAwaiter : INotifyCompletion
@@ -63,7 +63,7 @@ struct TaskEnumerableAwaiter : INotifyCompletion
         _awaiter.GetResult();
 }
 
-static class EnumerableExtensions
+public static class EnumerableExtensions
 {
     public static TaskEnumerableAwaiter GetAwaiter(this IEnumerable<Task> tasks) =>
         new TaskEnumerableAwaiter(tasks);
