@@ -167,6 +167,8 @@ async Task<string> GetContentAsync(string filePath)
 `TaskEnumerableAwaiter` is an awaiter for a collection of tasks. It makes the C# compiler support awaiting a collection of tasks directly instead of calling `Task.WhenAll` first:
 
 ```csharp
+HttpClient _httpClient = new HttpClient();
+
 static async Task DownloadAllAsync()
 {
     string[] urls = new[]
@@ -176,8 +178,7 @@ static async Task DownloadAllAsync()
         "http://www.twitter.com"
     };
 
-    HttpClient httpClient = new HttpClient();
-    string[] strings = await urls.Select(url => httpClient.GetStringAsync(url));
+    string[] strings = await urls.Select(url => _httpClient.GetStringAsync(url));
     foreach (var content in strings)
     {
         Console.WriteLine(content);
@@ -238,9 +239,9 @@ Task.Delay(1000).ContinueWithSynchronously(_ => Console.WriteLine("Done"));
 When working with `TaskCompletionSource` it's common to copy the result (or exception/cancellation) of another task, usually returned from an async method. `TryCompleteFromCompletedTask` checks the task's state and complete the `TaskCompletionSource` accordingly. This can be used for example when there's a single worker executing the actual operations one at a time and completing `TaskCompletionSource` instances that consumers are awaiting:
 
 ```csharp
-BlockingCollection<string> _urls;
-Queue<TaskCompletionSource<string>> _waiters;
-HttpClient _httpClient;
+BlockingCollection<string> _urls = new BlockingCollection<string>();
+Queue<TaskCompletionSource<string>> _waiters = new Queue<TaskCompletionSource<string>>();
+HttpClient _httpClient = new HttpClient();
 
 async Task DownloadAllAsync()
 {
@@ -269,14 +270,14 @@ It can sometimes be useful to treat an existing task as a signaling mechanism fo
 For example, TPL Dataflow blocks have a `Completion` property which is a task to enable the block's consumer to await its completion. If we want to show a loading animation to represent the block's operation, we need to cancel it when the block completes and we know that happened when the `Completion` task completes:
 
 ```csharp
+HttpClient _httpClient = new HttpClient();
+
 async Task<IEnumerable<string>> DownloadAllAsync(IEnumerable<string> urls)
 {
     var results = new ConcurrentBag<string>();
-
-    var httpClient = new HttpClient();
     var block = new ActionBlock<string>(async url =>
     {
-        var result = await httpClient.GetStringAsync(url);
+        var result = await _httpClient.GetStringAsync(url);
         results.Add(result);
     });
 
