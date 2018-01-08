@@ -186,7 +186,7 @@ static async Task DownloadAllAsync()
 }
 ```
 
-It supports both `IEnumerable<Task>` & `IEnumerable<Task<TResult>>` and using `ConfigureAwait(false)` to avoid context capturing.
+It supports both `IEnumerable<Task>` & `IEnumerable<Task<TResult>>` and using `ConfigureAwait(false)` to avoid context capturing. I've written about it more extensively [here](http://blog.i3arnon.com/2018/01/02/task-enumerable-awaiter/).
 
 ---
 
