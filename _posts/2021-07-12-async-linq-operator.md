@@ -65,7 +65,7 @@ So now when `Where` is called no execution has started yet, it will only start w
 
 ```csharp
 IAsyncEnumerable<Hamster> hamsters = // ..
-IAsyncEnumerable<Hamster> filteredHamsters = hamsters.Where(hamster => hamster.Name == "bar");
+IAsyncEnumerable<Hamster> filteredHamsters = hamsters.Where(hamster => hamster.Name == "Bar");
 // No execution has happened yet
 await foreach (Hamster hamster in filteredHamsters)
 {
