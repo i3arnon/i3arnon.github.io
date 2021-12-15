@@ -40,9 +40,17 @@ async Task LinqToMongo()
 }
 ```
 
-Normally you would just cast the `IQueryable` into an `IEnumerable` (hopefully with `AsEnumerable`) and use LINQ to Objects which also supports deferred execution. However, since `IEnumerable` is synchronous doing that defeats the whole purpose of using async/await to begin with. You could also materialize the entire collection into memory and then use client-side filters but that can take too much memory and time.
+Normally you would just cast the `IQueryable` into an `IEnumerable` (with `AsEnumerable`) and use LINQ to Objects which also supports deferred execution. However, since `IEnumerable` is synchronous doing that defeats the whole purpose of using async/await to begin with. You could also materialize the entire collection into memory and then use client-side filters but that can take too much memory and time.
 
-A former coworker of mine ([Tsach Vayness](https://linkedin.com/in/tsachv "Tsach Vayness")) suggested finding an existing library with async LINQ to Objects support and plugging it into the MongoDB C# driver. That enables using all the LINQ to Objects operators over MongoDB. There are a few of these libraries and the best, in my opinion, is [Reactive Extensions' Interactive Extensions](https://github.com/Reactive-Extensions/Rx.NET#interactive-extensions "Rx.NET") ([Ix-Async on nuget.org](https://www.nuget.org/packages/Ix-Async/ "Ix-Async")).
+A friend of mine ([Tsach Vayness](https://linkedin.com/in/tsachv)) suggested finding an existing library with async LINQ to Objects support and plugging it into the MongoDB C# driver. That enables using all the LINQ to Objects operators over MongoDB. There are a few of these libraries and the best, in my opinion, is [Reactive Extensions' Interactive Extensions](https://github.com/Reactive-Extensions/Rx.NET#interactive-extensions "Rx.NET") ([Ix-Async on nuget.org](https://www.nuget.org/packages/Ix-Async/ "Ix-Async")).
+
+---
+
+### Edit (2021-12):
+
+Hey, it's me from the future. In C# 8.0 async streams (i.e. `IAsyncEnumerable`s) were added to support truly asynchronous enumeration. That makes the desire to treat MongoDB's `IAsynCursor` as a "regular" async stream you can use with async LINQ and `await foreach`. So I made a small library allowing just that: [MongoAsyncEnumerableAdapter](https://github.com/i3arnon/MongoAsyncEnumerableAdapter). It's much more robust and safe than the implementation below and I encourage you to use it instead. The custom implementation deep dive below is still interesting so I also encourage you to keep reading.
+
+---
 
 All that's needed is an adapter from mongo's `IAsyncCursorSource`, `IAsyncCursor` to Interactive Extensions' `IAsyncEnumerable`, `IAsyncEnumerator` (which are already pretty similar) and then you can use all of Ix's operators on the MongoDB cursors. Here's the previous example comparing two of the queried document's fields fixed by moving the filter to the client-side:
 
